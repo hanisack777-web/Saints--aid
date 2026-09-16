@@ -1,0 +1,33 @@
+{
+  "name": "بيان احتياجات القديسين 2026",
+  "short_name": "احتياجات القديسين",
+  "description": "بيان تفاعلي بأسماء ومبالغ احتياجات القديسين لمنطقة مغاغة وبني مزار وببا والفشن - كنيسة الإخوة",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#faf6ee",
+  "theme_color": "#4a1520",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

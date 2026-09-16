@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>بيان احتياجات القديسين 2026</title>
+<meta name="theme-color" content="#4a1520">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="احتياجات القديسين">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --maroon: #6b1f2a;
+  --maroon-deep: #4a1520;
+  --gold: #b8860b;
+  --gold-light: #d9a441;
+  --cream: #faf6ee;
+  --paper: #fffdf9;
+  --ink: #2b2420;
+  --ink-soft: #6f6255;
+  --line: #e7ddc9;
+  --good: #3f6b4f;
+  --bg: var(--cream);
+  --surface: var(--paper);
+  --text: var(--ink);
+  --text-soft: var(--ink-soft);
+  --border: var(--line);
+  --accent: var(--maroon);
+  --accent-2: var(--gold);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg: #1c1512;
+    --surface: #241a16;
+    --text: #f1e7d8;
+    --text-soft: #c2ae95;
+    --border: #3a2b23;
+    --accent: #d99a7a;
+    --accent-2: #e0b559;
+  }
+}
+:root[data-theme="dark"]{
+  --bg: #1c1512;
+  --surface: #241a16;
+  --text: #f1e7d8;
+  --text-soft: #c2ae95;
+  --border: #3a2b23;
+  --accent: #d99a7a;
+  --accent-2: #e0b559;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+html,body{margin:0; padding:0;}
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Tajawal', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.app{
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg);
+  position: relative;
+  padding-bottom: 84px;
+}
+
+/* ---- Top bar ---- */
+.topbar{
+  background: linear-gradient(160deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+  color: #f3e6d8;
+  padding: 22px 20px 26px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 6px 18px rgba(0,0,0,.18);
+}
+.topbar .cross{
+  font-size: 13px;
+  letter-spacing: .5px;
+  color: var(--gold-light);
+  opacity: .9;
+  margin: 0 0 4px;
+}
+.topbar h1{
+  font-family: 'Aref Ruqaa', serif;
+  font-weight: 700;
+  font-size: 26px;
+  margin: 0 0 2px;
+  line-height: 1.25;
+}
+.topbar .sub{
+  font-size: 13.5px;
+  color: #e4cdb2;
+  margin: 0;
+}
+.topbar-tabs{
+  display:flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.topbar-tabs button{
+  flex:1;
+  border: 1px solid rgba(243,230,216,.28);
+  background: rgba(255,255,255,.06);
+  color: #f3e6d8;
+  border-radius: 12px;
+  padding: 8px 6px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.topbar-tabs button.active{
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #2b1a06;
+  font-weight: 700;
+}
+
+/* ---- Screens ---- */
+.screen{ display:none; padding: 18px 16px 8px; animation: fade .25s ease; }
+.screen.active{ display:block; }
+@keyframes fade{ from{opacity:0; transform: translateY(6px);} to{opacity:1; transform:none;} }
+
+/* ---- Stat cards ---- */
+.stats-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.stat-card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 14px 12px;
+}
+.stat-card .num{
+  font-family: 'Aref Ruqaa', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+  display:block;
+  line-height:1.15;
+}
+.stat-card .lbl{
+  font-size: 12.5px;
+  color: var(--text-soft);
+  margin-top: 3px;
+  display:block;
+}
+.stat-card.wide{ grid-column: 1 / -1; background: linear-gradient(135deg, var(--maroon), var(--maroon-deep)); border:none; }
+.stat-card.wide .num{ color: var(--gold-light); font-size: 28px; }
+.stat-card.wide .lbl{ color: #e4cdb2; }
+
+/* ---- Section heading ---- */
+.section-title{
+  font-family: 'Aref Ruqaa', serif;
+  font-size: 19px;
+  font-weight: 700;
+  margin: 6px 4px 10px;
+  color: var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.section-title small{
+  font-family:'Tajawal',sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-soft);
+}
+
+/* ---- Meeting list ---- */
+.meeting-card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 13px 14px;
+  margin-bottom: 10px;
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  cursor:pointer;
+  transition: transform .12s ease, border-color .12s ease;
+}
+.meeting-card:active{ transform: scale(.98); }
+.meeting-badge{
+  width:38px; height:38px; border-radius: 11px;
+  background: var(--maroon);
+  color: var(--gold-light);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Aref Ruqaa', serif; font-weight:700; font-size:16px;
+  flex-shrink:0;
+}
+.meeting-info{ flex:1; min-width:0; }
+.meeting-info .name{ font-weight:700; font-size:15px; margin-bottom:2px; }
+.meeting-info .committee{ font-size:12px; color:var(--text-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.meeting-amount{ text-align:left; flex-shrink:0; }
+.meeting-amount .amt{ font-weight:700; color:var(--accent); font-size:14px; white-space:nowrap; }
+.meeting-amount .cases{ font-size:11px; color:var(--text-soft); }
+.chevron{ color: var(--text-soft); font-size:18px; margin-inline-start:2px; }
+
+/* ---- Detail screen ---- */
+.detail-header{
+  display:flex; align-items:center; gap:10px; margin-bottom: 14px;
+}
+.back-btn{
+  width:36px; height:36px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text); font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.detail-title{ font-family:'Aref Ruqaa', serif; font-size:20px; font-weight:700; }
+.detail-title .num-badge{ color:var(--accent-2); }
+
+.detail-summary{
+  background: var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  display:flex;
+  flex-wrap:wrap;
+  gap: 10px 18px;
+}
+.detail-summary .mini{ min-width: 40%; }
+.detail-summary .mini b{ display:block; font-size:15px; color:var(--accent); }
+.detail-summary .mini span{ font-size:11.5px; color:var(--text-soft); }
+.detail-summary .committee-line{
+  width:100%;
+  border-top:1px dashed var(--border);
+  padding-top:8px;
+  font-size:12.5px;
+  color: var(--text-soft);
+}
+.detail-summary .committee-line b{ color: var(--text); font-weight:600; }
+.mismatch-note{
+  font-size: 11.5px;
+  color: var(--accent);
+  background: rgba(184,134,11,.1);
+  border: 1px solid rgba(184,134,11,.3);
+  border-radius: 10px;
+  padding: 6px 10px;
+  margin-bottom: 12px;
+}
+
+.person-row{
+  display:flex; align-items:center; gap:10px;
+  background: var(--surface);
+  border:1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+.person-row .idx{
+  width:26px; height:26px; border-radius:50%;
+  background: var(--cream);
+  border:1px solid var(--border);
+  color: var(--text-soft);
+  font-size:11px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+:root[data-theme="dark"] .person-row .idx, @media (prefers-color-scheme: dark){ .person-row .idx{ background: #2c211b; } }
+.person-row .pname{ flex:1; font-size:14px; font-weight:500; }
+.person-row .pnote{ font-size:11px; color: var(--text-soft); display:block; margin-top:1px; }
+.person-row .pamt{ font-weight:700; color: var(--accent); font-size:13.5px; white-space:nowrap; }
+.person-row.emergency{ border-color: var(--accent-2); background: rgba(184,134,11,.06); }
+.person-row.emergency .pname{ color: var(--accent); }
+
+/* ---- Search screen ---- */
+.search-box{
+  display:flex; align-items:center; gap:8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.search-box input{
+  flex:1; border:none; outline:none; background:transparent;
+  font-family:'Tajawal',sans-serif; font-size:15px; color:var(--text);
+}
+.search-box input::placeholder{ color: var(--text-soft); }
+.search-icon{ color: var(--text-soft); font-size:16px; }
+.result-meeting-tag{ font-size:10.5px; color:var(--accent); background:rgba(107,31,42,.08); border-radius:6px; padding:2px 7px; display:inline-block; margin-top:3px; }
+:root[data-theme="dark"] .result-meeting-tag{ background: rgba(217,154,122,.12); }
+.empty-state{ text-align:center; padding: 40px 20px; color: var(--text-soft); }
+.empty-state .icon{ font-size: 34px; margin-bottom: 8px; }
+
+/* ---- Stats screen (bars) ---- */
+.bar-row{ margin-bottom: 12px; }
+.bar-row .bar-label{ display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:4px; }
+.bar-row .bar-label .nm{ font-weight:600; }
+.bar-row .bar-label .vl{ color:var(--accent); font-weight:700; }
+.bar-track{ height:10px; border-radius:6px; background: var(--border); overflow:hidden; }
+.bar-fill{ height:100%; border-radius:6px; background: linear-gradient(90deg, var(--gold), var(--maroon)); }
+
+/* ---- Bottom nav ---- */
+.bottom-nav{
+  position: fixed;
+  bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display:flex;
+  padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+  z-index: 30;
+}
+.nav-btn{
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+  background:none; border:none; color: var(--text-soft);
+  font-family:'Tajawal',sans-serif; font-size: 11px; cursor:pointer; padding:4px;
+}
+.nav-btn .ic{ font-size:19px; }
+.nav-btn.active{ color: var(--accent); font-weight:700; }
+
+::selection{ background: var(--accent-2); color:#2b1a06; }
+
+/* ---- Edit mode ---- */
+.edit-toggle-btn{
+  margin-inline-start:auto;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--accent);
+  font-family:'Tajawal',sans-serif;
+  font-size:12.5px;
+  font-weight:700;
+  border-radius:10px;
+  padding:8px 12px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.edit-toggle-btn.on{ background:var(--accent); color:#fff8ec; border-color:var(--accent); }
+.detail-summary.editing .mini{ width:100%; min-width:100%; }
+.field-label{ font-size:11px; color:var(--text-soft); display:block; margin-bottom:3px; }
+.detail-summary input, .detail-summary textarea{
+  width:100%; border:1px solid var(--border); border-radius:9px;
+  background:var(--bg); color:var(--text); font-family:'Tajawal',sans-serif;
+  font-size:14px; padding:7px 9px; outline:none;
+}
+.detail-summary input:focus{ border-color:var(--accent); }
+.person-row.edit{ align-items:flex-start; flex-wrap:wrap; gap:6px 8px; }
+.person-row.edit .field-col{ display:flex; flex-direction:column; gap:2px; }
+.person-row.edit .col-idx{ width:44px; flex-shrink:0; }
+.person-row.edit .col-name{ flex:1; min-width:110px; }
+.person-row.edit .col-amt{ width:90px; flex-shrink:0; }
+.person-row.edit input{
+  border:1px solid var(--border); border-radius:8px; background:var(--bg);
+  color:var(--text); font-family:'Tajawal',sans-serif; font-size:13px; padding:7px 8px; width:100%; outline:none;
+}
+.person-row.edit input:focus{ border-color:var(--accent); }
+.del-btn{
+  width:32px; height:32px; border-radius:9px; border:1px solid rgba(180,50,50,.35);
+  background:rgba(180,50,50,.08); color:#b43232; font-size:15px; cursor:pointer; flex-shrink:0;
+  align-self:center;
+}
+.add-person-btn{
+  width:100%; border:1.5px dashed var(--border); background:transparent; color:var(--accent);
+  border-radius:12px; padding:12px; font-family:'Tajawal',sans-serif; font-weight:700;
+  font-size:13.5px; cursor:pointer; margin-top:4px; margin-bottom:14px;
+}
+.save-bar{
+  position:fixed; bottom:64px; left:50%; transform:translateX(-50%) translateY(120%);
+  width:100%; max-width:480px; background:var(--accent); color:#fff8ec;
+  display:flex; align-items:center; gap:10px; justify-content:space-between;
+  padding:12px 16px; box-shadow:0 -6px 18px rgba(0,0,0,.18); z-index:35;
+  transition: transform .2s ease; font-size:13px;
+}
+.save-bar.show{ transform:translateX(-50%) translateY(0); }
+.save-bar button{
+  border:none; border-radius:9px; padding:8px 14px; font-family:'Tajawal',sans-serif;
+  font-weight:700; font-size:12.5px; cursor:pointer;
+}
+.save-bar .btn-save{ background:var(--gold); color:#2b1a06; }
+.save-bar .btn-discard{ background:rgba(255,255,255,.14); color:#fff8ec; }
+.toast{
+  position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-140%);
+  background:var(--ink); color:#fff8ec; padding:10px 18px; border-radius:12px;
+  font-size:13px; z-index:60; transition:transform .25s ease; box-shadow:0 6px 16px rgba(0,0,0,.25);
+  max-width:88%; text-align:center;
+}
+.toast.show{ transform:translateX(-50%) translateY(0); }
+.iaid-edit{ background:none; border:none; color:var(--gold-light); font-size:12px; cursor:pointer; margin-inline-start:6px; text-decoration:underline; }
+
+/* ---- Settings / Drive sync ---- */
+.settings-btn{
+  width:36px; height:36px; border-radius:10px; border:1px solid rgba(243,230,216,.3);
+  background:rgba(255,255,255,.08); color:#f3e6d8; font-size:16px; cursor:pointer; flex-shrink:0;
+}
+.sync-status{
+  margin: 8px 0 0; font-size:11.5px; color:#e4cdb2; display:flex; align-items:center; gap:6px;
+}
+.sync-dot{ width:7px; height:7px; border-radius:50%; background:#9a9a9a; display:inline-block; }
+.sync-dot.ok{ background:#5fbf7d; }
+.sync-dot.busy{ background:var(--gold-light); }
+.sync-dot.err{ background:#e05c5c; }
+.settings-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px;
+}
+.settings-help{ font-size:12.5px; color:var(--text-soft); line-height:1.7; margin:0 0 12px; }
+.settings-card input{
+  width:100%; border:1px solid var(--border); border-radius:10px; background:var(--bg);
+  color:var(--text); font-family:'Tajawal',sans-serif; font-size:13px; padding:9px 10px; outline:none;
+}
+.settings-card input:focus{ border-color:var(--accent); }
+.settings-btn-primary{
+  flex:1; background:var(--accent); color:#fff8ec; border:none; border-radius:10px;
+  padding:10px; font-weight:700; font-size:13px; cursor:pointer;
+}
+.settings-btn-secondary{
+  width:100%; background:transparent; color:var(--accent); border:1px solid var(--border);
+  border-radius:10px; padding:10px; font-weight:700; font-size:13px; cursor:pointer;
+}
+.settings-note{ font-size:11.5px; color:var(--text-soft); margin-top:8px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+      <div>
+        <p class="cross">✝ كنيسة الإخوة بجمهورية مصر العربية</p>
+        <h1 id="topTitle">لجنة احتياجات القديسين</h1>
+        <p class="sub" id="topSub">منطقة مغاغة وبني مزار وببا والفشن — عام 2026</p>
+      </div>
+      <button class="settings-btn" onclick="switchTab('settings')" title="الإعدادات وربط جوجل درايف">⚙</button>
+    </div>
+    <p class="sync-status" id="sync-status">—</p>
+  </div>
+
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <div class="stats-grid">
+      <div class="stat-card wide">
+        <span class="num" id="s-grand">—</span>
+        <span class="lbl">الإجمالي الكلي المرصود (جنيه)</span>
+      </div>
+      <div class="stat-card">
+        <span class="num" id="s-meetings">—</span>
+        <span class="lbl">عدد الاجتماعات</span>
+      </div>
+      <div class="stat-card">
+        <span class="num" id="s-cases">—</span>
+        <span class="lbl">إجمالي عدد الحالات</span>
+      </div>
+      <div class="stat-card">
+        <span class="num" id="s-distributed">—</span>
+        <span class="lbl">ما تم توزيعه على الاجتماعات (جنيه)</span>
+      </div>
+      <div class="stat-card">
+        <span class="num" id="s-individual">—</span>
+        <span class="lbl">مساعدات فردية على مدار العام (جنيه)<button class="iaid-edit" style="color:var(--accent)" onclick="editIndividualAid()">تعديل</button></span>
+      </div>
+    </div>
+
+    <div class="section-title">الاجتماعات <small id="meet-count-lbl"></small></div>
+    <div id="meeting-list"></div>
+  </div>
+
+  <!-- DETAIL -->
+  <div class="screen" id="screen-detail">
+    <div class="detail-header">
+      <button class="back-btn" onclick="goHome()">→</button>
+      <div class="detail-title" id="detail-name">—</div>
+      <button class="edit-toggle-btn" id="edit-toggle-btn" onclick="toggleEdit()">✎ تعديل</button>
+    </div>
+    <div class="detail-summary" id="detail-summary"></div>
+    <div id="detail-mismatch"></div>
+    <div id="detail-people"></div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="screen" id="screen-search">
+    <div class="section-title">البحث عن اسم</div>
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input id="search-input" type="text" placeholder="اكتب اسم الأخ أو الأخت..." oninput="doSearch()">
+    </div>
+    <div id="search-results"></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="screen" id="screen-stats">
+    <div class="section-title">توزيع المبالغ حسب الاجتماع</div>
+    <div id="stats-bars"></div>
+    <div class="section-title" style="margin-top:22px">عدد الحالات حسب الاجتماع</div>
+    <div id="stats-bars-cases"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="screen" id="screen-settings">
+    <div class="section-title">الإعدادات وربط جوجل درايف</div>
+    <div class="settings-card">
+      <p class="settings-help">
+        لحفظ التعديلات على جوجل درايف الخاص بك بشكل دائم من أي جهاز، الصق هنا رابط "تطبيق الويب" (Web App URL)
+        الناتج من نشر ملف Google Apps Script المرفق (Code.gs). راجع ملف التعليمات README المرفق مع التطبيق لمعرفة خطوات الإنشاء والنشر.
+      </p>
+      <span class="field-label">رابط Apps Script (Web App URL)</span>
+      <input type="text" id="drive-url-input" placeholder="https://script.google.com/macros/s/....../exec" dir="ltr" style="text-align:left">
+      <div style="display:flex; gap:8px; margin-top:10px;">
+        <button class="settings-btn-primary" onclick="saveDriveUrl()">حفظ الرابط</button>
+        <button class="settings-btn-secondary" onclick="testDriveConnection()">اختبار الاتصال</button>
+      </div>
+      <p class="settings-note" id="drive-test-result"></p>
+      <div style="margin-top:18px; border-top:1px dashed var(--border); padding-top:14px;">
+        <button class="settings-btn-secondary" onclick="pullFromDrive()">تحميل آخر نسخة من درايف الآن</button>
+        <button class="settings-btn-secondary" style="margin-top:8px;" onclick="pushToDrive()">رفع النسخة الحالية إلى درايف الآن</button>
+      </div>
+    </div>
+    <p class="settings-note" style="margin-top:14px;">بدون ربط جوجل درايف، التعديلات تُحفظ محليًا على هذا الجهاز فقط (داخل المتصفح).</p>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-btn active" data-tab="home" onclick="switchTab('home')"><span class="ic">⌂</span>الرئيسية</button>
+    <button class="nav-btn" data-tab="search" onclick="switchTab('search')"><span class="ic">⌕</span>بحث</button>
+    <button class="nav-btn" data-tab="stats" onclick="switchTab('stats')"><span class="ic">▤</span>إحصائيات</button>
+    <button class="nav-btn" data-tab="settings" onclick="switchTab('settings')"><span class="ic">⚙</span>الإعدادات</button>
+  </div>
+
+  <div class="save-bar" id="save-bar">
+    <span id="save-bar-text">لديك تعديلات غير محفوظة</span>
+    <div style="display:flex; gap:8px;">
+      <button class="btn-discard" onclick="discardChanges()">تراجع</button>
+      <button class="btn-save" onclick="saveChanges()">حفظ التعديلات</button>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script id="app-data" type="application/json">{"meetings": [{"id": 1, "name": "اجتماع مغاغة", "officialCases": 12, "officialAmount": 100000, "committee": "جميل مختار - لطفي يونان", "people": [{"m": 1, "name": "عطا شنودة", "amount": 8000, "note": null}, {"m": 2, "name": "رفعت إبراهيم", "amount": 12000, "note": null}, {"m": 3, "name": "هاني فايز شاكر", "amount": 4000, "note": null}, {"m": 4, "name": "ماجد صفوت", "amount": 5000, "note": null}, {"m": 5, "name": "نادية عطية", "amount": 7000, "note": null}, {"m": 6, "name": "فايزة لبيب", "amount": 4000, "note": null}, {"m": 7, "name": "ام رأفت يوسف فايز", "amount": 8000, "note": null}, {"m": 8, "name": "نسرين رسمي", "amount": 8000, "note": null}, {"m": 9, "name": "وهيبة ساويرس", "amount": 8000, "note": null}, {"m": 10, "name": "فادية اسحق عبد المسيح", "amount": 6000, "note": null}, {"m": 11, "name": "نادية ارملة مدحت متياس", "amount": 6000, "note": null}, {"m": 11, "name": "هناء ارملة وفيق البدري", "amount": 5000, "note": null}, {"m": 12, "name": "سلوي رفعت إبراهيم", "amount": 10000, "note": null}, {"m": 13, "name": "مريم ميخائيل إبراهيم", "amount": 5000, "note": null}, {"m": null, "name": "طوارئ", "amount": 4000, "note": null}], "computedTotal": 100000, "computedCount": 15}, {"id": 2, "name": "اجتماع بني مزار", "officialCases": 15, "officialAmount": 106000, "committee": "يعقوب جاد - حنا اسحق", "people": [{"m": 1, "name": "ارملة المرحوم كامل حنا", "amount": 6000, "note": null}, {"m": 2, "name": "الأخ عاطف جرجس", "amount": 15000, "note": null}, {"m": 3, "name": "سليمان رشدي", "amount": 6000, "note": null}, {"m": 4, "name": "ايمان فوزي", "amount": 6000, "note": null}, {"m": 5, "name": "ام مينا سمير", "amount": 6000, "note": null}, {"m": 6, "name": "ام بيشوي ناصر", "amount": 6000, "note": null}, {"m": 7, "name": "نبيل  ميخائيل", "amount": 10000, "note": null}, {"m": 8, "name": "رحمة حنين", "amount": 8000, "note": null}, {"m": 9, "name": "سامية ملاك", "amount": 6000, "note": null}, {"m": 10, "name": "عفة عبد المسيح", "amount": 8000, "note": null}, {"m": 11, "name": "عازر شفيق", "amount": 8000, "note": null}, {"m": 12, "name": "كمال كامل", "amount": 5000, "note": null}, {"m": 13, "name": "كمال خليل ( زواج ابنته)", "amount": 8000, "note": null}, {"m": 14, "name": "ام يوسف", "amount": 2000, "note": null}, {"m": 15, "name": "اسرة المرحوم ايمن رزق", "amount": 6000, "note": null}], "computedTotal": 106000, "computedCount": 15}, {"id": 3, "name": "اجتماع الشيخ زياد", "officialCases": 29, "officialAmount": 118000, "committee": "هاني مختار - نبيل خليل", "people": [{"m": 1, "name": "فايق صدقي رزق", "amount": 6000, "note": null}, {"m": 2, "name": "مريم نصر برسوم", "amount": 3000, "note": null}, {"m": 3, "name": "نعمة فؤاد نصيف", "amount": 5000, "note": null}, {"m": 4, "name": "نادية نجيب إبراهيم", "amount": 5000, "note": null}, {"m": 5, "name": "سوسو منير فهمي مسعد", "amount": 4000, "note": null}, {"m": 6, "name": "نور عياد حنا", "amount": 4000, "note": null}, {"m": 7, "name": "عيد يوسف جرجس", "amount": 2000, "note": null}, {"m": 8, "name": "نعمة صالح حبيب", "amount": 2500, "note": null}, {"m": 9, "name": "عايدة ثابت يونان", "amount": 4000, "note": null}, {"m": 10, "name": "هالة عماد ساوريس خليل", "amount": 3500, "note": null}, {"m": 11, "name": "عطا الله وديع عطا الله", "amount": 8000, "note": null}, {"m": 12, "name": "برسوم فؤاد برسوم", "amount": 4000, "note": null}, {"m": 13, "name": "فتحية منير فهمي", "amount": 2000, "note": null}, {"m": 14, "name": "سامح عطا الله وديع", "amount": 1500, "note": null}, {"m": 15, "name": "سنية وديع عطا الله", "amount": 2000, "note": null}, {"m": 16, "name": "عيد بولس خليل", "amount": 6000, "note": null}, {"m": 17, "name": "زوزة عزيز فانوس", "amount": 2000, "note": null}, {"m": 18, "name": "سهير نور عياد حنا", "amount": 4000, "note": null}, {"m": 19, "name": "سارة فهمي ابراهيم", "amount": 6000, "note": null}, {"m": 20, "name": "يوسف عاشور اسعد", "amount": 5000, "note": null}, {"m": 21, "name": "متي سعد صادق", "amount": 4000, "note": null}, {"m": 22, "name": "مارتن امير عادل", "amount": 4000, "note": null}, {"m": 23, "name": "زغلول حبيب فهيم", "amount": 2000, "note": null}, {"m": 24, "name": "عماد حنا واصف", "amount": 2000, "note": null}, {"m": 25, "name": "ثابت عادل ثابت", "amount": 2000, "note": null}, {"m": 26, "name": "سميرة نبيل خليل", "amount": 3000, "note": null}, {"m": 27, "name": "فرح فايز يوسف", "amount": 2000, "note": null}, {"m": 28, "name": "جون عادل حنا", "amount": 5000, "note": null}, {"m": 29, "name": "عادل جرجس يوسف", "amount": 3000, "note": null}, {"m": 30, "name": "نادية هاني", "amount": 8000, "note": null}, {"m": null, "name": "طوارئ", "amount": 3500, "note": null}], "computedTotal": 118000, "computedCount": 31}, {"id": 4, "name": "اجتماع سلاقوس", "officialCases": 46, "officialAmount": 115700, "committee": "عماد عطية - أبو باسم", "people": [{"m": 1, "name": "سمير صالح بطرس", "amount": 3200, "note": null}, {"m": 24, "name": "إسكندر محروس عزيز", "amount": 2000, "note": null}, {"m": 2, "name": "فتحي ناروز كامل", "amount": 3000, "note": null}, {"m": 25, "name": "النونة حنا رزق الله", "amount": 2000, "note": null}, {"m": 3, "name": "نادي امين رزق الله", "amount": 3000, "note": null}, {"m": 26, "name": "سامية فايق بطرس", "amount": 3000, "note": null}, {"m": 4, "name": "كيرلس عاطف ثابت", "amount": 2250, "note": null}, {"m": 27, "name": "عدلية جرجس عازر", "amount": 1000, "note": null}, {"m": 5, "name": "أنور وليم  كامل", "amount": 2000, "note": null}, {"m": 28, "name": "سامية فهمي عازر", "amount": 1000, "note": null}, {"m": 6, "name": "كمال  عياد إبراهيم", "amount": 2500, "note": null}, {"m": 29, "name": "سميرة فهمي خليل", "amount": 2000, "note": null}, {"m": 7, "name": "فايز عزيز ايوب", "amount": 7000, "note": null}, {"m": 30, "name": "نادية فهمي حنا", "amount": 1000, "note": null}, {"m": 8, "name": "عايدة عبد المسيح حنا", "amount": 3000, "note": null}, {"m": 31, "name": "فتحية ذكي جرجس", "amount": 1000, "note": null}, {"m": 9, "name": "عبد المسيح أيوب فام", "amount": 2500, "note": null}, {"m": 32, "name": "مريم يوسف متي", "amount": 4000, "note": null}, {"m": 10, "name": "شكري أيوب فام", "amount": 2000, "note": null}, {"m": 33, "name": "هدية فايز شاكر", "amount": 2000, "note": null}, {"m": 11, "name": "عادل ابراهيم شحاتة", "amount": 2500, "note": null}, {"m": 34, "name": "عدلية يوسف غبريال", "amount": 1500, "note": null}, {"m": 12, "name": "ميلاد فايز شاكر", "amount": 12000, "note": null}, {"m": 35, "name": "وديعة فايق بطرس", "amount": 1500, "note": null}, {"m": 13, "name": "رضا امين رزق الله", "amount": 3000, "note": null}, {"m": 36, "name": "منيرة حنا صادق", "amount": 2000, "note": null}, {"m": 14, "name": "محب صفوت كامل", "amount": 5000, "note": null}, {"m": 37, "name": "عايدة شحاته خليل", "amount": 1500, "note": null}, {"m": 15, "name": "نادي عياد عبد المسيح", "amount": 7000, "note": null}, {"m": 38, "name": "فوزية كامل يوسف", "amount": 2000, "note": null}, {"m": 16, "name": "نصحي ثابت حليم", "amount": 1250, "note": null}, {"m": 39, "name": "نعمة عزيز أيوب", "amount": 3000, "note": null}, {"m": 17, "name": "مجدي لويس حليم", "amount": 2000, "note": null}, {"m": 40, "name": "عادل عطية وليم", "amount": 1000, "note": null}, {"m": 18, "name": "حنان فايق بطرس", "amount": 1500, "note": null}, {"m": 41, "name": "سوزان يسي اسحق", "amount": 2000, "note": null}, {"m": 19, "name": "نورة وليم كامل", "amount": 1000, "note": null}, {"m": 42, "name": "فاروق يوسف إبراهيم", "amount": 2000, "note": null}, {"m": 20, "name": "صباح ثابت رزق الله", "amount": 2500, "note": null}, {"m": 43, "name": "شاكر عدلي شاكر", "amount": 1000, "note": null}, {"m": 21, "name": "سميرة رياض حنا", "amount": 1500, "note": null}, {"m": 44, "name": "نجاح سمير فرج", "amount": 1500, "note": null}, {"m": 22, "name": "سميرة شحاته حنا", "amount": 1500, "note": null}, {"m": 45, "name": "نبيل شكري ايوب", "amount": 2000, "note": null}, {"m": 23, "name": "حنان مايز بطرس", "amount": 2500, "note": null}, {"m": 46, "name": "فليب عيد كمال", "amount": 2000, "note": null}], "computedTotal": 115700, "computedCount": 46}, {"id": 5, "name": "عزبة بطرس", "officialCases": 32, "officialAmount": 75000, "committee": "ناثان عطية - نمر رشدي", "people": [{"m": 1, "name": "مجدي بطرس عبد الشهيد", "amount": 2500, "note": null}, {"m": 2, "name": "سناء شفيق عبد النور", "amount": 2000, "note": null}, {"m": 3, "name": "نشوي عيد عطية", "amount": 3000, "note": null}, {"m": 4, "name": "فايزة إبراهيم متي", "amount": 3000, "note": null}, {"m": 5, "name": "كيريا خليل عطية", "amount": 2500, "note": null}, {"m": 6, "name": "شارود حنا فهيم", "amount": 2500, "note": null}, {"m": 7, "name": "ماجد فرج الله جيد", "amount": 2500, "note": null}, {"m": 8, "name": "صباح عطية مرزوق", "amount": 2000, "note": null}, {"m": 9, "name": "اليصابات عوض عبد الشهيد", "amount": 2500, "note": null}, {"m": 10, "name": "اعتدال لمعي ناشد", "amount": 1500, "note": null}, {"m": 11, "name": "منيرة اخنوخ كامل", "amount": 2000, "note": null}, {"m": 12, "name": "مكاسب ميخائيل دانيال", "amount": 2500, "note": null}, {"m": 13, "name": "محب رمزي شاكر", "amount": 2000, "note": null}, {"m": 14, "name": "رضا اسحق متي", "amount": 2000, "note": null}, {"m": 15, "name": "اشرف صموئيل فاروق", "amount": 2500, "note": null}, {"m": 16, "name": "عطا الله فاروق حبيب", "amount": 2500, "note": null}, {"m": 17, "name": "سعدية اديب كامل", "amount": 2500, "note": null}, {"m": 18, "name": "عاطف كامل برسوم", "amount": 1500, "note": null}, {"m": 19, "name": "فارس اسحق متي", "amount": 2500, "note": null}, {"m": 20, "name": "فايز إبراهيم متي", "amount": 2000, "note": null}, {"m": 21, "name": "عفاف رمزي شاكر", "amount": 2000, "note": null}, {"m": 22, "name": "موسي السيد موسي", "amount": 2000, "note": null}, {"m": 23, "name": "عيد وليم حنا", "amount": 2500, "note": null}, {"m": 24, "name": "نشأت ميخائيل حنا", "amount": 2500, "note": null}, {"m": 25, "name": "عزت هور إبراهيم", "amount": 2500, "note": null}, {"m": 26, "name": "عايدة السيد حنا", "amount": 2000, "note": null}, {"m": 27, "name": "فايقة شفيق عبد النور", "amount": 2000, "note": null}, {"m": 28, "name": "كرستين لطف رزق الله", "amount": 2500, "note": null}, {"m": 29, "name": "نرمين عطية خليل", "amount": 2000, "note": null}, {"m": 30, "name": "صبحي السيد حنا", "amount": 2000, "note": null}, {"m": 31, "name": "يونان السيد حنا", "amount": 2000, "note": null}, {"m": 32, "name": "ناثان عطية ( دروس لابنه)", "amount": 5000, "note": null}], "computedTotal": 75000, "computedCount": 32}, {"id": 6, "name": "اشنين النصاري", "officialCases": 29, "officialAmount": 70000, "committee": "مينا جمال - جرجس", "people": [{"m": 1, "name": "يوسف مسعود السيد", "amount": 3000, "note": null}, {"m": 2, "name": "سعيدة هنري ميخائيل", "amount": 1500, "note": null}, {"m": 3, "name": "ملاك حنا تاوضروس", "amount": 1500, "note": null}, {"m": 4, "name": "فرحة فوزي سلامة", "amount": 2000, "note": null}, {"m": 5, "name": "منال لويز نجيب", "amount": 3000, "note": null}, {"m": 6, "name": "اماليا استفانوس خليل", "amount": 3000, "note": null}, {"m": 7, "name": "نادية حنين ميخائيل", "amount": 2000, "note": null}, {"m": 8, "name": "جمالات وجيه حلمي", "amount": 2000, "note": null}, {"m": 9, "name": "ميرفت سيد ثابت", "amount": 3000, "note": null}, {"m": 10, "name": "صلاح عبد الملاك حنا", "amount": 3000, "note": null}, {"m": 11, "name": "ماجدة رضا نجيب", "amount": 2000, "note": null}, {"m": 12, "name": "جميلة فايز عبده", "amount": 2000, "note": null}, {"m": 13, "name": "نادية حنا يوسف", "amount": 1500, "note": null}, {"m": 14, "name": "سامية إبراهيم شحاته", "amount": 1500, "note": null}, {"m": 15, "name": "ثريا اسحق مليكة", "amount": 1500, "note": null}, {"m": 16, "name": "عايدة حنا", "amount": 1500, "note": null}, {"m": 17, "name": "ايزيس هواش السيد", "amount": 1500, "note": null}, {"m": 18, "name": "نعمة عادل حنا", "amount": 3000, "note": null}, {"m": 19, "name": "عيدة حبيب رزق", "amount": 2500, "note": null}, {"m": 20, "name": "جيهان نجيب كامل", "amount": 2500, "note": null}, {"m": 21, "name": "نادية السيد حنا", "amount": 2500, "note": null}, {"m": 22, "name": "عبير عادل رزق", "amount": 2500, "note": null}, {"m": 23, "name": "مريم سعيد كامل", "amount": 2000, "note": null}, {"m": 24, "name": "كريستين جيد نعيم", "amount": 3000, "note": null}, {"m": 25, "name": "هناء إبراهيم شحاته", "amount": 2000, "note": null}, {"m": 26, "name": "امال سمير يوسف", "amount": 2000, "note": null}, {"m": 27, "name": "رضا ميخائيل بشارة", "amount": 3000, "note": null}, {"m": 28, "name": "مريم داود زاخر", "amount": 2000, "note": null}, {"m": 29, "name": "سمير حلمي ثابت", "amount": 2500, "note": null}, {"m": 30, "name": "طوارئ", "amount": 5000, "note": null}], "computedTotal": 70000, "computedCount": 30}, {"id": 7, "name": "اجتماع حبيب لطف الله", "officialCases": 34, "officialAmount": 61000, "committee": "حنا حبيب - رؤوف فرج الله", "people": [{"m": 1, "name": "اسحق عياد اسحق", "amount": 1200, "note": null}, {"m": 2, "name": "برسيس حنا الله", "amount": 1200, "note": null}, {"m": 3, "name": "شكرية صدقي لبيب", "amount": 1200, "note": null}, {"m": 4, "name": "نادية شحاته", "amount": 1200, "note": null}, {"m": 5, "name": "غطاس نبيل يوسف", "amount": 1200, "note": null}, {"m": 6, "name": "هدية بشري صالح", "amount": 1200, "note": null}, {"m": 7, "name": "جورج يوسف", "amount": 1500, "note": null}, {"m": 8, "name": "حنان موسي", "amount": 1500, "note": null}, {"m": 9, "name": "تهاني رشدي", "amount": 1500, "note": null}, {"m": 10, "name": "وهيب يوسف", "amount": 1000, "note": null}, {"m": 11, "name": "مريم محروس", "amount": 1500, "note": null}, {"m": 12, "name": "سنة شحاته", "amount": 1000, "note": null}, {"m": 13, "name": "منيرة فرج الله", "amount": 1200, "note": null}, {"m": 14, "name": "عفاف حنا الله", "amount": 1200, "note": null}, {"m": 15, "name": "حنا فريج صادق", "amount": 1200, "note": null}, {"m": 16, "name": "مريم مجدي", "amount": 1500, "note": null}, {"m": 17, "name": "سارة صالح", "amount": 1500, "note": null}, {"m": 18, "name": "عفاف قدسي", "amount": 1500, "note": null}, {"m": 19, "name": "فيبي سمير", "amount": 1500, "note": null}, {"m": 20, "name": "ميلاد إبراهيم", "amount": 1500, "note": null}, {"m": 21, "name": "غالية حنا الله", "amount": 1500, "note": null}, {"m": 22, "name": "نورة شفيق بباوي", "amount": 1000, "note": null}, {"m": 23, "name": "فخري حنا الله", "amount": 5000, "note": null}, {"m": 24, "name": "جاكلين فخري", "amount": 1000, "note": null}, {"m": 25, "name": "تريزة فريز", "amount": 2500, "note": null}, {"m": 26, "name": "عايدة شحاته حنا", "amount": 1500, "note": null}, {"m": 27, "name": "دامرس جورج", "amount": 1500, "note": null}, {"m": 28, "name": "مسعودة حلمي", "amount": 1500, "note": null}, {"m": 29, "name": "هناء شكري", "amount": 3000, "note": null}, {"m": 30, "name": "امير جورج", "amount": 1500, "note": null}, {"m": 31, "name": "حنونة شكر الله", "amount": 1500, "note": null}, {"m": 32, "name": "سلوى مكرم", "amount": 1500, "note": null}, {"m": 33, "name": "نادية بباوي فلتس", "amount": 1500, "note": null}, {"m": 34, "name": "زكريا فرج الله", "amount": 1500, "note": null}, {"m": 35, "name": "طوارئ", "amount": 3700, "note": null}, {"m": 36, "name": "أبو ديفيد خضار", "amount": 5000, "note": null}], "computedTotal": 61000, "computedCount": 36}, {"id": 8, "name": "اجتماع الزاوية", "officialCases": 25, "officialAmount": 80000, "committee": "مجدي مكرم - مجدي نصحي", "people": [{"m": 1, "name": "نجاة ناشد بشارة", "amount": 3000, "note": null}, {"m": 2, "name": "حنان ذكي خليل", "amount": 3000, "note": null}, {"m": 3, "name": "عدلية مكرم ذكي", "amount": 3000, "note": null}, {"m": 4, "name": "مينا عيد امين", "amount": 3000, "note": null}, {"m": 5, "name": "جميلات لبيب شحاته", "amount": 3000, "note": null}, {"m": 6, "name": "مرسا حلمي دانيال", "amount": 3000, "note": null}, {"m": 7, "name": "ماريان فرح", "amount": 3000, "note": null}, {"m": 8, "name": "فيفي وجيه امين", "amount": 3000, "note": null}, {"m": 9, "name": "صباح رضا ابراهيم", "amount": 3000, "note": null}, {"m": 10, "name": "نبيلة عماد مجدي", "amount": 3000, "note": null}, {"m": 11, "name": "عياد ذكي عياد", "amount": 3000, "note": null}, {"m": 12, "name": "ميرفت عاطف نجيب", "amount": 3000, "note": null}, {"m": 13, "name": "ناجي حنين حنا", "amount": 3000, "note": null}, {"m": 14, "name": "نادية حنين حنا", "amount": 3000, "note": null}, {"m": 15, "name": "شحاته اسعد حنين", "amount": 3000, "note": null}, {"m": 16, "name": "وليد وهيب ذكي", "amount": 3000, "note": null}, {"m": 17, "name": "شوقي وجيه امين", "amount": 3000, "note": null}, {"m": 18, "name": "أسرة سامح سيد فهمي", "amount": 3000, "note": null}, {"m": 19, "name": "منصور وهيب ذكي", "amount": 3000, "note": null}, {"m": 20, "name": "عاطف اسحق ذكي", "amount": 3000, "note": null}, {"m": 21, "name": "فايق ذكي خليل", "amount": 3000, "note": null}, {"m": 22, "name": "ايمن ماهر فهمي", "amount": 3000, "note": null}, {"m": 23, "name": "زوجة وديع جميل", "amount": 3000, "note": null}, {"m": 24, "name": "رضا إبراهيم", "amount": 3000, "note": null}, {"m": 25, "name": "مينا رضا", "amount": 3000, "note": null}, {"m": 25, "name": "طوارئ", "amount": 5000, "note": null}], "computedTotal": 80000, "computedCount": 26}, {"id": 9, "name": "اجتماع إبراهيم عبد السيد", "officialCases": 56, "officialAmount": 79500, "committee": "إبراهيم عزيز - رضا فايز", "people": [{"m": 1, "name": "دولت فهمي اسحق", "amount": 1500, "note": null}, {"m": 2, "name": "مريم فرج وهبة", "amount": 2500, "note": null}, {"m": 3, "name": "كاميليا صادق كامل", "amount": 1500, "note": null}, {"m": 4, "name": "نعمات نجيب باراباس", "amount": 2000, "note": null}, {"m": 5, "name": "شحاته عطية عبد الملاك", "amount": 2000, "note": null}, {"m": 6, "name": "إبراهيم عزيز نجيب", "amount": 3000, "note": null}, {"m": 7, "name": "عادل صموئيل حليم", "amount": 3000, "note": null}, {"m": 8, "name": "بطرس تيموثاوس حليم", "amount": 2500, "note": null}, {"m": 9, "name": "مرثا حنا عزيز", "amount": 2000, "note": null}, {"m": 10, "name": "فايز ابراهيم جرجس", "amount": 1500, "note": null}, {"m": 11, "name": "مكرم ذكي اسعد", "amount": 2000, "note": null}, {"m": 12, "name": "نعمة عاطف شفيق", "amount": 500, "note": null}, {"m": 13, "name": "فايزة صادق  كامل", "amount": 1500, "note": null}, {"m": 14, "name": "عواطف عزمي حنا", "amount": 1000, "note": null}, {"m": 15, "name": "فرحة شحات عطية", "amount": 1000, "note": null}, {"m": 16, "name": "عايشة حليم مقار", "amount": 1000, "note": null}, {"m": 17, "name": "صباحية عزمي امين", "amount": 500, "note": null}, {"m": 18, "name": "ملاك عطية عبد الملاك", "amount": 2000, "note": null}, {"m": 19, "name": "ملاك صادق جرجس", "amount": 1500, "note": null}, {"m": 20, "name": "سامية سيد باراباس", "amount": 800, "note": null}, {"m": 21, "name": "وديع فتحي ذكى", "amount": 500, "note": null}, {"m": 22, "name": "فرحة توفيق ام مجدى فهمى", "amount": 1000, "note": null}, {"m": 23, "name": "رزق وليم بطرس", "amount": 1000, "note": null}, {"m": 24, "name": "غالية صادق جرجس", "amount": 1200, "note": null}, {"m": 25, "name": "فريزة شحاته", "amount": 500, "note": null}, {"m": 26, "name": "فرج كامل  سيحة", "amount": 2000, "note": null}, {"m": 27, "name": "سعدة حبيب", "amount": 800, "note": null}, {"m": 28, "name": "رشا جرجس", "amount": 1000, "note": null}, {"m": 29, "name": "عزمي امين عوض", "amount": 2000, "note": null}, {"m": 30, "name": "فوزية باراباس", "amount": 1000, "note": null}, {"m": 31, "name": "بلسيم فخري حنين", "amount": 1000, "note": null}, {"m": 32, "name": "عطيات اسعد  حنين", "amount": 800, "note": null}, {"m": 33, "name": "ناجي فهمي عبد الملاك", "amount": 500, "note": null}, {"m": 34, "name": "عطيات ابراهيم بباوي", "amount": 1000, "note": null}, {"m": 35, "name": "شحاته امين ابراهيم", "amount": 1500, "note": null}, {"m": 36, "name": "فوزية صادق عبد الملاك", "amount": 1000, "note": null}, {"m": 37, "name": "جرجس غالي جرجس", "amount": 1000, "note": null}, {"m": 38, "name": "أشرف شحاته صموئيل", "amount": 1200, "note": null}, {"m": 39, "name": "ارملة مصلح عطية", "amount": 1500, "note": null}, {"m": 40, "name": "عزيز نجيب سيحة", "amount": 1500, "note": null}, {"m": 41, "name": "عايدة شحاته", "amount": 800, "note": null}, {"m": 42, "name": "حنان شحاته عبد الملاك", "amount": 1500, "note": null}, {"m": 43, "name": "جوهرة زوجة محروس", "amount": 800, "note": null}, {"m": 44, "name": "زوجة مفيد سعيد", "amount": 800, "note": null}, {"m": 45, "name": "زوجة عيد لمعي", "amount": 500, "note": null}, {"m": 46, "name": "امير ناجي كامل", "amount": 1500, "note": null}, {"m": 47, "name": "زوجة رفعت نجيب", "amount": 500, "note": null}, {"m": 48, "name": "نوره ملاك", "amount": 1000, "note": null}, {"m": 49, "name": "زوجة وليد يعقوب", "amount": 800, "note": null}, {"m": 50, "name": "مريم اسعد", "amount": 500, "note": null}, {"m": 51, "name": "زوجة ابانوب ميلاد", "amount": 500, "note": null}, {"m": 52, "name": "مريم حنا", "amount": 500, "note": null}, {"m": 53, "name": "نوره سامي ذكي", "amount": 2500, "note": null}, {"m": 54, "name": "سامية فخري", "amount": 2500, "note": null}, {"m": 55, "name": "نادية صادق", "amount": 500, "note": null}, {"m": 56, "name": "بنت الأخ إبراهيم درس", "amount": 4000, "note": null}, {"m": 57, "name": "طوارئ", "amount": 5000, "note": null}], "computedTotal": 79500, "computedCount": 57}, {"id": 10, "name": "اجتماع جزيرة شارونة", "officialCases": 24, "officialAmount": 71500, "committee": "سلطان سعد - ارنست عطية", "people": [{"m": 1, "name": "فالح إسكندر معوض", "amount": 1000, "note": null}, {"m": 2, "name": "اليشع حنا يوسف", "amount": 2000, "note": null}, {"m": 3, "name": "اماني حمدي استفانوس", "amount": 1500, "note": null}, {"m": 4, "name": "امال مايز جرجس", "amount": 3000, "note": null}, {"m": 5, "name": "نبيلة عادل فريد", "amount": 1500, "note": null}, {"m": 6, "name": "مريم وهبة عبيد", "amount": 2500, "note": null}, {"m": 7, "name": "فرح إبراهيم يوسف", "amount": 8000, "note": null}, {"m": 8, "name": "اماني صبحي ناشد", "amount": 1500, "note": null}, {"m": 9, "name": "ايلين ابراهيم معوض", "amount": 3000, "note": null}, {"m": 10, "name": "فرحة عوض جرجس", "amount": 2000, "note": null}, {"m": 11, "name": "شهدي رجائي فكري", "amount": 3000, "note": null}, {"m": 12, "name": "إبراهيم فريد مرقس", "amount": 2500, "note": null}, {"m": 13, "name": "عماد إبراهيم معوض", "amount": 4000, "note": null}, {"m": 14, "name": "ماري نصر سعد", "amount": 2000, "note": null}, {"m": 15, "name": "عفيفة نعيم توفيق", "amount": 7000, "note": null}, {"m": 16, "name": "فادية كسبان حبيب", "amount": 3000, "note": null}, {"m": 17, "name": "هبة سبع حنا", "amount": 3000, "note": null}, {"m": 18, "name": "ايمان هاني ذكري", "amount": 1500, "note": null}, {"m": 19, "name": "عادل فريد مرقس", "amount": 1500, "note": null}, {"m": 20, "name": "ام يوثام حنان", "amount": 2500, "note": null}, {"m": 21, "name": "حنان مرقس فريد", "amount": 6000, "note": null}, {"m": 22, "name": "فادية إبراهيم مهني", "amount": 1500, "note": null}, {"m": 23, "name": "نبيل ذكي", "amount": 3000, "note": null}, {"m": 24, "name": "سلطان سعد", "amount": 5000, "note": null}], "computedTotal": 71500, "computedCount": 24}, {"id": 11, "name": "اجتماع شارونة", "officialCases": 19, "officialAmount": 42000, "committee": "يوسف خميس - مختار خميس", "people": [{"m": 1, "name": "عواطف صليب مرقس", "amount": 2000, "note": null}, {"m": 2, "name": "سامي حبيب سوريال", "amount": 2000, "note": null}, {"m": 3, "name": "اوجيني يوسف عطية", "amount": 1500, "note": null}, {"m": 4, "name": "عايدة لبيب عبد الشهيد", "amount": 2000, "note": null}, {"m": 5, "name": "راعوث كامل", "amount": 1500, "note": null}, {"m": 6, "name": "فرحان جرجس عطية", "amount": 2000, "note": null}, {"m": 7, "name": "ماجدة رزق فرج", "amount": 1500, "note": null}, {"m": 8, "name": "مرثا كامل ناشد", "amount": 1500, "note": null}, {"m": 9, "name": "عاطف صليب مرقس", "amount": 2000, "note": null}, {"m": 10, "name": "حنان سعد برسوم", "amount": 2000, "note": null}, {"m": 11, "name": "سعدية يوسف", "amount": 1500, "note": null}, {"m": 12, "name": "اليس ميخائيل", "amount": 1500, "note": null}, {"m": 13, "name": "عاطف فرحان", "amount": 1500, "note": null}, {"m": 14, "name": "سماح عاطف", "amount": 2000, "note": null}, {"m": 15, "name": "مرثا نصحي", "amount": 1500, "note": null}, {"m": 16, "name": "نوال فايز شفيق", "amount": 1000, "note": null}, {"m": 17, "name": "ماجدة رشدي هندي", "amount": 1500, "note": null}, {"m": 18, "name": "هنية لطيف حنا", "amount": 1500, "note": null}, {"m": 19, "name": "نعمة شحاته يعقوب", "amount": 2000, "note": null}, {"m": null, "name": "عملية قلب مفتوح الأخ يوسف", "amount": 10000, "note": null}], "computedTotal": 42000, "computedCount": 20}, {"id": 12, "name": "اجتماع أبو جلبان", "officialCases": 14, "officialAmount": 96000, "committee": "رأفت مكرم - شحاته حنا", "people": [{"m": 1, "name": "ميلاد خميس حنا", "amount": 8000, "note": null}, {"m": 2, "name": "عوض صليب عبد المسيح", "amount": 10000, "note": null}, {"m": 3, "name": "جودة فتحي ذكري", "amount": 8000, "note": null}, {"m": 4, "name": "كريم نجيب حنا", "amount": 8000, "note": null}, {"m": 5, "name": "ماهر عيد شكري", "amount": 8000, "note": null}, {"m": 6, "name": "فوزية زخاري حنا", "amount": 4000, "note": null}, {"m": 7, "name": "نورهان مدحت ميلاد", "amount": 4000, "note": null}, {"m": 8, "name": "سامي ملاك شكري", "amount": 6000, "note": null}, {"m": 9, "name": "صباح فضل الله", "amount": 6000, "note": null}, {"m": 10, "name": "امين صلاح عبد المسيح", "amount": 5000, "note": null}, {"m": 11, "name": "محفوظ عيد اسحق", "amount": 5000, "note": null}, {"m": 12, "name": "رأفت مكرم عبد المسيح", "amount": 6000, "note": null}, {"m": 13, "name": "رامي موسي سليمان", "amount": 8000, "note": null}, {"m": 14, "name": "سامية شاكر (علاج)", "amount": 10000, "note": null}], "computedTotal": 96000, "computedCount": 14}, {"id": 13, "name": "الفشن", "officialCases": 29, "officialAmount": 35000, "committee": "الأخ عادل ذكري حنا", "people": [{"m": 1, "name": "نادية ناشد مرقس", "amount": 750, "note": null}, {"m": 2, "name": "كريم نصر الله عزيز", "amount": 750, "note": null}, {"m": 3, "name": "تريزا عيد اسحق", "amount": 750, "note": null}, {"m": 4, "name": "حنان ثابت عزيز", "amount": 750, "note": null}, {"m": 5, "name": "وفاء حنا هارون", "amount": 750, "note": null}, {"m": 6, "name": "فايزة عزيز إبراهيم", "amount": 750, "note": null}, {"m": 7, "name": "نادين رضا شحاته", "amount": 750, "note": null}, {"m": 8, "name": "امال سليمان بنيامين", "amount": 750, "note": null}, {"m": 9, "name": "ايمان سعد اسعد", "amount": 750, "note": null}, {"m": 10, "name": "نوال تعلب رزق", "amount": 750, "note": null}, {"m": 11, "name": "حنان صابر رشدي", "amount": 750, "note": null}, {"m": 12, "name": "فوزية سليمان", "amount": 750, "note": null}, {"m": 13, "name": "فردوس عزيز برسوم", "amount": 2000, "note": null}, {"m": 14, "name": "باسم جمال", "amount": 2000, "note": null}, {"m": 15, "name": "مرفت كمال", "amount": 2000, "note": null}, {"m": 16, "name": "بولس رشدي إسكندر", "amount": 2000, "note": null}, {"m": 17, "name": "اميرة إيليا بخيت", "amount": 3000, "note": null}, {"m": 18, "name": "مجيدة وهيب عبيد", "amount": 2000, "note": null}, {"m": 19, "name": "نسرين صموئيل بخيت", "amount": 2000, "note": null}, {"m": 20, "name": "سماح توفيق شاكر", "amount": 1500, "note": null}, {"m": 21, "name": "حكمة ثابت عبد الله", "amount": 1500, "note": null}, {"m": 22, "name": "فايزة شحاته يونان", "amount": 750, "note": null}, {"m": 23, "name": "مارينا زاهي مقار", "amount": 2000, "note": null}, {"m": 24, "name": "ست سمر", "amount": 750, "note": null}, {"m": 25, "name": "جميلة مجدي", "amount": 750, "note": null}, {"m": 26, "name": "صباح جرجس", "amount": 750, "note": null}, {"m": 27, "name": "سحر زغلول", "amount": 1500, "note": null}, {"m": 28, "name": "نعمة صبحي", "amount": 750, "note": null}, {"m": 29, "name": "نرجس أنور", "amount": 750, "note": null}], "computedTotal": 35000, "computedCount": 29}, {"id": 14, "name": "سدس", "officialCases": 13, "officialAmount": 19500, "committee": "غالي صدقي - منير عزيز", "people": [{"m": 1, "name": "قمر عبد المسيح عبده", "amount": 1500, "note": null}, {"m": 2, "name": "مجيدة جرجس سعد", "amount": 1500, "note": null}, {"m": 3, "name": "اماني فخري عزيز", "amount": 1500, "note": null}, {"m": 4, "name": "جميلة فرح معوض", "amount": 1500, "note": null}, {"m": 5, "name": "سنية فانوس سعد", "amount": 1500, "note": null}, {"m": 6, "name": "بهية إبراهيم حنا", "amount": 1500, "note": null}, {"m": 7, "name": "سامي إبراهيم حنا", "amount": 1500, "note": null}, {"m": 8, "name": "ايمن ثابت إبراهيم", "amount": 1500, "note": null}, {"m": 9, "name": "سعاد عزيز عبده", "amount": 1500, "note": null}, {"m": 10, "name": "مينا فخري منير", "amount": 1500, "note": null}, {"m": 11, "name": "اشرف سامي فاضل", "amount": 1500, "note": null}, {"m": 12, "name": "انجي فخري عزيز", "amount": 1500, "note": null}, {"m": 13, "name": "سونة صبحي اسعد", "amount": 1500, "note": null}], "computedTotal": 19500, "computedCount": 13}, {"id": 15, "name": "خليل واصف", "officialCases": 43, "officialAmount": 71300, "committee": "مايز عياد - عبد الله بولس", "people": [{"m": 1, "name": "حكمة وهبة", "amount": 2000, "note": null}, {"m": 2, "name": "نادية وهبة", "amount": 1200, "note": null}, {"m": 3, "name": "لبيبة عطا الله", "amount": 1200, "note": null}, {"m": 4, "name": "سعدية صادق", "amount": 1200, "note": null}, {"m": 5, "name": "محاسن حبيب", "amount": 2000, "note": null}, {"m": 6, "name": "سوسو فاروق", "amount": 1200, "note": null}, {"m": 7, "name": "مريم حكيم", "amount": 1500, "note": null}, {"m": 8, "name": "قدسية أيوب", "amount": 2500, "note": null}, {"m": 9, "name": "عفيفة رشدي", "amount": 1200, "note": null}, {"m": 10, "name": "زكية إبراهيم", "amount": 1200, "note": null}, {"m": 11, "name": "فرحة واصف", "amount": 1200, "note": null}, {"m": 12, "name": "عفاف عدلي", "amount": 2500, "note": null}, {"m": 13, "name": "وديع فهيم", "amount": 2500, "note": null}, {"m": 14, "name": "رومترا عزمي", "amount": 2500, "note": null}, {"m": 15, "name": "مريم عياد", "amount": 1200, "note": null}, {"m": 16, "name": "كامليا شاكر", "amount": 1200, "note": null}, {"m": 17, "name": "مريم عبد الشهيد", "amount": 1200, "note": null}, {"m": 18, "name": "امجد وديع", "amount": 1500, "note": null}, {"m": 19, "name": "هاني ملاك", "amount": 2000, "note": null}, {"m": 20, "name": "عفاف سمير", "amount": 1500, "note": null}, {"m": 21, "name": "كامل عياد", "amount": 2500, "note": null}, {"m": 22, "name": "غطاس منير", "amount": 2500, "note": null}, {"m": 23, "name": "تريفينا مجدي", "amount": 1200, "note": null}, {"m": 24, "name": "امل ملاك", "amount": 1200, "note": null}, {"m": 25, "name": "رضا عياد", "amount": 3000, "note": null}, {"m": 26, "name": "نورا منير", "amount": 1000, "note": null}, {"m": 27, "name": "سمكة فايق", "amount": 1000, "note": null}, {"m": 28, "name": "فضل فهيم", "amount": 2500, "note": null}, {"m": 29, "name": "صبحي منير", "amount": 1000, "note": null}, {"m": 30, "name": "نزيه سعيد", "amount": 1000, "note": null}, {"m": 31, "name": "سعد وديع", "amount": 1200, "note": null}, {"m": 32, "name": "سعاد عياد", "amount": 1200, "note": null}, {"m": 33, "name": "مريم محروس", "amount": 2500, "note": null}, {"m": 34, "name": "مريم شحاته", "amount": 2000, "note": null}, {"m": 35, "name": "اميرة شحاته", "amount": 2000, "note": null}, {"m": 36, "name": "هاني وديع", "amount": 1200, "note": null}, {"m": 37, "name": "سعد جميل", "amount": 2000, "note": null}, {"m": 38, "name": "سامية موريس", "amount": 3000, "note": "اجتماع قمبش"}, {"m": 39, "name": "عياد توفيق", "amount": 1200, "note": null}, {"m": 40, "name": "صبري ملاك", "amount": 1200, "note": null}, {"m": 41, "name": "سعدية رشدي", "amount": 1200, "note": null}, {"m": 42, "name": "كمليا فهمي", "amount": 1200, "note": null}, {"m": 43, "name": "لوزا عايد", "amount": 2000, "note": null}], "computedTotal": 71300, "computedCount": 43}, {"id": 16, "name": "الفنت", "officialCases": 28, "officialAmount": 32500, "committee": "بيتر سمير", "people": [{"m": 1, "name": "سامي فؤاد غالي", "amount": 750, "note": null}, {"m": 2, "name": "ممدوح فؤاد", "amount": 3000, "note": null}, {"m": 3, "name": "نادي توفيق ذكي", "amount": 750, "note": null}, {"m": 4, "name": "اميرة سامي فوزي", "amount": 750, "note": null}, {"m": 5, "name": "جرجس راغب", "amount": 750, "note": null}, {"m": 6, "name": "بشري صادق بسخرون", "amount": 750, "note": null}, {"m": 7, "name": "سناء فؤاد فتحي", "amount": 1250, "note": null}, {"m": 8, "name": "عيسي رمزي", "amount": 750, "note": null}, {"m": 9, "name": "مجدي حنا صليب", "amount": 750, "note": null}, {"m": 10, "name": "سهير حبيب شفيق", "amount": 750, "note": null}, {"m": 11, "name": "عايدة بطرس اخنوخ", "amount": 750, "note": null}, {"m": 12, "name": "امل معوض بولس", "amount": 2000, "note": null}, {"m": 13, "name": "كريمة فوزي شاكر", "amount": 750, "note": null}, {"m": 14, "name": "مارينا جميل", "amount": 750, "note": null}, {"m": 15, "name": "نبيلة فؤاد يوسف", "amount": 750, "note": null}, {"m": 16, "name": "مرفت سمير فهمي", "amount": 750, "note": null}, {"m": 17, "name": "سعد موسي", "amount": 750, "note": null}, {"m": 18, "name": "جملات حنا", "amount": 750, "note": null}, {"m": 19, "name": "اسحق فؤاد يوسف", "amount": 750, "note": null}, {"m": 20, "name": "رضا متي امين", "amount": 750, "note": null}, {"m": 21, "name": "فايزة توفيق", "amount": 750, "note": null}, {"m": 22, "name": "نادية كامل تادرس", "amount": 750, "note": null}, {"m": 23, "name": "متي بباوي ميخائيل", "amount": 750, "note": null}, {"m": 24, "name": "ملاك حنا صليب", "amount": 750, "note": null}, {"m": 25, "name": "مريم فرح حنا", "amount": 750, "note": null}, {"m": 26, "name": "نعناعة توفيق هارون", "amount": 750, "note": null}, {"m": 27, "name": "سنية عزيز", "amount": 750, "note": null}, {"m": 28, "name": "سامية جرجي", "amount": 750, "note": null}], "computedTotal": 25000, "computedCount": 28}, {"id": 17, "name": "كفر درويش", "officialCases": 10, "officialAmount": 60000, "committee": "عزمي اسحق", "people": [{"m": 1, "name": "حنان عبد المسيح حنا", "amount": 10000, "note": null}, {"m": 2, "name": "فايز حبيب ونيس", "amount": 6000, "note": null}, {"m": 3, "name": "عطية فايز حبيب", "amount": 7000, "note": null}, {"m": 4, "name": "حكيمة رزق الله جرجس", "amount": 6000, "note": null}, {"m": 5, "name": "فادية راغب عبد السيد", "amount": 6000, "note": null}, {"m": 6, "name": "نادية جمال عبد السيد", "amount": 6000, "note": null}, {"m": 7, "name": "عايدة فايز", "amount": 6000, "note": null}, {"m": 8, "name": "غالية عيد صادق", "amount": 7000, "note": null}, {"m": 9, "name": "مريم صليب", "amount": 3000, "note": null}, {"m": 10, "name": "هايدي ميلاد", "amount": 3000, "note": null}], "computedTotal": 60000, "computedCount": 10}], "grand": {"totalMeetings": 17, "totalCasesOfficial": 458, "totalAmountOfficial": 1233000, "individualAid": 164600, "grandTotal": 1376600}}</script>
+<script>
+let DATA = JSON.parse(document.getElementById('app-data').textContent);
+const fmt = n => (n===null || n===undefined || n==='') ? '—' : Number(n).toLocaleString('ar-EG');
+const escapeHtml = s => (s===null||s===undefined) ? '' : String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+let currentMeetingId = null;
+let editMode = false;
+let dirty = false;
+let canEditPage = true;
+
+const STORAGE_KEY = 'saints-aid-2026-data';
+const DRIVE_URL_KEY = 'saints-aid-2026-drive-url';
+
+function loadLocalCache(){
+  try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }
+  catch(e){ return null; }
+}
+function saveLocalCache(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA)); }catch(e){ /* storage unavailable */ }
+}
+function getDriveUrl(){
+  try{ return localStorage.getItem(DRIVE_URL_KEY) || ''; }catch(e){ return ''; }
+}
+function setDriveUrl(url){
+  try{ localStorage.setItem(DRIVE_URL_KEY, url); }catch(e){ /* storage unavailable */ }
+}
+
+function setSyncStatus(state, text){
+  const el = document.getElementById('sync-status');
+  if(!el) return;
+  const cls = state === 'ok' ? 'ok' : state === 'busy' ? 'busy' : state === 'err' ? 'err' : '';
+  el.innerHTML = `<span class="sync-dot ${cls}"></span>${escapeHtml(text)}`;
+}
+
+async function pullFromDrive(silent){
+  const url = getDriveUrl();
+  if(!url){ if(!silent) showToast('من فضلك أدخل رابط Apps Script أولاً من الإعدادات'); return false; }
+  setSyncStatus('busy', 'جارٍ التحميل من جوجل درايف...');
+  try{
+    const res = await fetch(url, { method: 'GET' });
+    if(!res.ok) throw new Error('bad status');
+    const json = await res.json();
+    if(json && json.meetings && json.grand){
+      DATA = json;
+      saveLocalCache();
+      document.getElementById('app-data').textContent = JSON.stringify(DATA);
+      clearDirty();
+      renderHome();
+      if(currentMeetingId){ renderDetail(); }
+      setSyncStatus('ok', 'متصل بجوجل درايف — آخر تحديث الآن');
+      if(!silent) showToast('تم تحميل آخر نسخة من جوجل درايف');
+      return true;
+    }
+    throw new Error('empty response');
+  }catch(e){
+    setSyncStatus('err', 'تعذر الاتصال بجوجل درايف — يعمل محليًا على هذا الجهاز');
+    if(!silent) showToast('تعذر الاتصال بجوجل درايف، تأكد من الرابط وإعدادات النشر');
+    return false;
+  }
+}
+
+async function pushToDrive(silent){
+  const url = getDriveUrl();
+  if(!url) return false;
+  setSyncStatus('busy', 'جارٍ الحفظ على جوجل درايف...');
+  try{
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(DATA)
+    });
+    if(!res.ok) throw new Error('bad status');
+    setSyncStatus('ok', 'تم الحفظ على جوجل درايف بنجاح');
+    if(!silent) showToast('تم رفع النسخة الحالية إلى جوجل درايف');
+    return true;
+  }catch(e){
+    setSyncStatus('err', 'تعذر الحفظ على جوجل درايف — التعديلات محفوظة محليًا فقط');
+    if(!silent) showToast('تعذر الحفظ على جوجل درايف، تأكد من الاتصال بالإنترنت والرابط');
+    return false;
+  }
+}
+
+async function testDriveConnection(){
+  const input = document.getElementById('drive-url-input');
+  const url = input.value.trim();
+  const resultEl = document.getElementById('drive-test-result');
+  if(!url){ resultEl.textContent = 'أدخل الرابط أولاً'; return; }
+  setDriveUrl(url);
+  resultEl.textContent = 'جارٍ الاختبار...';
+  const ok = await pullFromDrive(true);
+  resultEl.textContent = ok ? '✓ الاتصال يعمل بنجاح، وتم تحميل بيانات درايف' : '✕ تعذر الاتصال — راجع الرابط وصلاحيات نشر تطبيق الويب';
+}
+
+function saveDriveUrl(){
+  const input = document.getElementById('drive-url-input');
+  setDriveUrl(input.value.trim());
+  showToast('تم حفظ الرابط');
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+function markDirty(){
+  dirty = true;
+  document.getElementById('save-bar').classList.add('show');
+}
+
+function clearDirty(){
+  dirty = false;
+  document.getElementById('save-bar').classList.remove('show');
+}
+
+function recalcMeeting(mt){
+  mt.computedCount = mt.people.length;
+  mt.computedTotal = mt.people.reduce((s,p)=> s + (typeof p.amount === 'number' ? p.amount : 0), 0);
+}
+
+function recalcGrand(){
+  DATA.grand.totalMeetings = DATA.meetings.length;
+  DATA.grand.totalCasesOfficial = DATA.meetings.reduce((s,m)=> s + (Number(m.officialCases)||0), 0);
+  DATA.grand.totalAmountOfficial = DATA.meetings.reduce((s,m)=> s + (Number(m.officialAmount)||0), 0);
+  DATA.grand.grandTotal = DATA.grand.totalAmountOfficial + (Number(DATA.grand.individualAid)||0);
+}
+
+function editIndividualAid(){
+  const cur = DATA.grand.individualAid;
+  const val = prompt('قيمة المساعدات الفردية الجديدة (جنيه):', cur);
+  if(val === null) return;
+  const num = Number(val);
+  if(isNaN(num)){ showToast('قيمة غير صحيحة'); return; }
+  DATA.grand.individualAid = num;
+  recalcGrand();
+  markDirty();
+  renderHome();
+}
+
+function renderHome(){
+  document.getElementById('s-grand').textContent = fmt(DATA.grand.grandTotal);
+  document.getElementById('s-meetings').textContent = fmt(DATA.grand.totalMeetings);
+  document.getElementById('s-cases').textContent = fmt(DATA.grand.totalCasesOfficial);
+  document.getElementById('s-distributed').textContent = fmt(DATA.grand.totalAmountOfficial);
+  document.getElementById('s-individual').textContent = fmt(DATA.grand.individualAid);
+  document.getElementById('meet-count-lbl').textContent = `(${DATA.meetings.length})`;
+
+  const list = document.getElementById('meeting-list');
+  list.innerHTML = '';
+  DATA.meetings.forEach(mt => {
+    const card = document.createElement('div');
+    card.className = 'meeting-card';
+    card.onclick = () => openDetail(mt.id);
+    card.innerHTML = `
+      <div class="meeting-badge">${mt.id}</div>
+      <div class="meeting-info">
+        <div class="name">${escapeHtml(mt.name)}</div>
+        <div class="committee">${escapeHtml(mt.committee || '')}</div>
+      </div>
+      <div class="meeting-amount">
+        <div class="amt">${fmt(mt.officialAmount)} ج</div>
+        <div class="cases">${fmt(mt.officialCases)} حالة</div>
+      </div>
+      <div class="chevron">‹</div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function renderDetail(){
+  const mt = DATA.meetings.find(m => m.id === currentMeetingId);
+  if(!mt) return;
+  recalcMeeting(mt);
+
+  document.getElementById('detail-name').innerHTML = editMode
+    ? `<span class="num-badge">#${mt.id}</span>`
+    : `${escapeHtml(mt.name)} <span class="num-badge">#${mt.id}</span>`;
+
+  const editBtn = document.getElementById('edit-toggle-btn');
+  editBtn.textContent = editMode ? '✓ تم' : '✎ تعديل';
+  editBtn.classList.toggle('on', editMode);
+  editBtn.style.display = canEditPage ? '' : 'none';
+
+  const sum = document.getElementById('detail-summary');
+  if(editMode){
+    sum.classList.add('editing');
+    sum.innerHTML = `
+      <div class="mini">
+        <span class="field-label">اسم الاجتماع</span>
+        <input type="text" id="f-name" value="${escapeHtml(mt.name)}">
+      </div>
+      <div class="mini">
+        <span class="field-label">لجنة التوزيع</span>
+        <input type="text" id="f-committee" value="${escapeHtml(mt.committee || '')}">
+      </div>
+      <div class="mini">
+        <span class="field-label">الإجمالي الرسمي بالكشف (جنيه)</span>
+        <input type="number" id="f-amount" value="${mt.officialAmount ?? ''}">
+      </div>
+      <div class="mini">
+        <span class="field-label">عدد الحالات المسجل</span>
+        <input type="number" id="f-cases" value="${mt.officialCases ?? ''}">
+      </div>
+      <div class="committee-line">إجمالي المبالغ بالأسماء حاليًا: <b>${fmt(mt.computedTotal)} ج</b> — عدد الأسماء: <b>${fmt(mt.people.length)}</b></div>
+    `;
+    sum.querySelector('#f-name').oninput = e => { mt.name = e.target.value; markDirty(); };
+    sum.querySelector('#f-committee').oninput = e => { mt.committee = e.target.value; markDirty(); };
+    sum.querySelector('#f-amount').oninput = e => { mt.officialAmount = e.target.value===''? null : Number(e.target.value); markDirty(); };
+    sum.querySelector('#f-cases').oninput = e => { mt.officialCases = e.target.value===''? null : Number(e.target.value); markDirty(); };
+  } else {
+    sum.classList.remove('editing');
+    sum.innerHTML = `
+      <div class="mini"><b>${fmt(mt.officialAmount)} ج</b><span>الإجمالي الرسمي بالكشف</span></div>
+      <div class="mini"><b>${fmt(mt.officialCases)}</b><span>عدد الحالات المسجل</span></div>
+      <div class="mini"><b>${fmt(mt.computedTotal)} ج</b><span>إجمالي المبالغ بالأسماء</span></div>
+      <div class="mini"><b>${fmt(mt.people.length)}</b><span>عدد الأسماء المدرجة</span></div>
+      <div class="committee-line"><b>لجنة التوزيع:</b> ${escapeHtml(mt.committee) || 'غير محدد'}</div>
+    `;
+  }
+
+  const mismatch = document.getElementById('detail-mismatch');
+  if(mt.computedTotal !== mt.officialAmount){
+    mismatch.innerHTML = `<div class="mismatch-note">ملحوظة: يوجد فارق بين الإجمالي الرسمي (${fmt(mt.officialAmount)} ج) وإجمالي المبالغ المفصّلة بالأسماء (${fmt(mt.computedTotal)} ج).</div>`;
+  } else {
+    mismatch.innerHTML = '';
+  }
+
+  renderPeople(mt);
+}
+
+function renderPeople(mt){
+  const container = document.getElementById('detail-people');
+  if(editMode){
+    container.innerHTML = mt.people.map((p,i) => `
+      <div class="person-row edit" data-i="${i}">
+        <div class="field-col col-idx"><input type="text" data-field="m" value="${escapeHtml(p.m ?? '')}" placeholder="م"></div>
+        <div class="field-col col-name"><input type="text" data-field="name" value="${escapeHtml(p.name)}" placeholder="الاسم"></div>
+        <div class="field-col col-amt"><input type="number" data-field="amount" value="${p.amount ?? ''}" placeholder="المبلغ"></div>
+        <button class="del-btn" data-action="del" title="حذف">✕</button>
+      </div>
+    `).join('') + `<button class="add-person-btn" onclick="addPerson()">+ إضافة اسم جديد</button>`;
+
+    container.oninput = (e) => {
+      const row = e.target.closest('.person-row'); if(!row) return;
+      const i = +row.dataset.i;
+      const field = e.target.dataset.field;
+      let val = e.target.value;
+      if(field === 'amount') val = val === '' ? null : Number(val);
+      mt.people[i][field] = val;
+      markDirty();
+      recalcMeeting(mt);
+      const cl = document.querySelector('.committee-line');
+      if(cl) cl.innerHTML = `إجمالي المبالغ بالأسماء حاليًا: <b>${fmt(mt.computedTotal)} ج</b> — عدد الأسماء: <b>${fmt(mt.people.length)}</b>`;
+    };
+    container.onclick = (e) => {
+      if(e.target.dataset.action === 'del'){
+        const row = e.target.closest('.person-row');
+        const i = +row.dataset.i;
+        mt.people.splice(i,1);
+        markDirty();
+        renderPeople(mt);
+        recalcMeeting(mt);
+        const cl = document.querySelector('.committee-line');
+        if(cl) cl.innerHTML = `إجمالي المبالغ بالأسماء حاليًا: <b>${fmt(mt.computedTotal)} ج</b> — عدد الأسماء: <b>${fmt(mt.people.length)}</b>`;
+      }
+    };
+  } else {
+    container.oninput = null;
+    container.onclick = null;
+    container.innerHTML = mt.people.map((p,i) => {
+      const isEmergency = (p.name||'').includes('طوارئ');
+      return `
+      <div class="person-row${isEmergency ? ' emergency' : ''}">
+        <div class="idx">${p.m !== null && p.m !== undefined && p.m !== '' ? p.m : (i+1)}</div>
+        <div class="pname">${escapeHtml(p.name)}${p.note ? `<span class="pnote">${escapeHtml(p.note)}</span>` : ''}</div>
+        <div class="pamt">${fmt(p.amount)} ج</div>
+      </div>
+    `;
+    }).join('');
+  }
+}
+
+function addPerson(){
+  const mt = DATA.meetings.find(m => m.id === currentMeetingId);
+  const lastM = mt.people.length ? mt.people[mt.people.length-1].m : 0;
+  mt.people.push({ m: (typeof lastM === 'number' ? lastM + 1 : mt.people.length + 1), name: '', amount: null, note: null });
+  markDirty();
+  renderPeople(mt);
+}
+
+function toggleEdit(){
+  if(!canEditPage){ showToast('لا تملك صلاحية التعديل على هذه الصفحة'); return; }
+  editMode = !editMode;
+  renderDetail();
+}
+
+function openDetail(id){
+  currentMeetingId = id;
+  editMode = false;
+  renderDetail();
+  showScreen('detail');
+}
+
+function goHome(){ switchTab('home'); }
+
+async function saveChanges(){
+  recalcGrand();
+  saveLocalCache();
+  document.getElementById('app-data').textContent = JSON.stringify(DATA);
+  renderHome();
+  if(currentMeetingId){ renderDetail(); }
+
+  const url = getDriveUrl();
+  if(!url){
+    clearDirty();
+    showToast('تم الحفظ محليًا على هذا الجهاز فقط. اربط جوجل درايف من الإعدادات ⚙ للحفظ الدائم على كل أجهزتك');
+    return;
+  }
+  const ok = await pushToDrive();
+  if(ok){ clearDirty(); }
+}
+
+function discardChanges(){
+  const cached = loadLocalCache();
+  if(cached){ DATA = cached; }
+  editMode = false;
+  clearDirty();
+  document.getElementById('app-data').textContent = JSON.stringify(DATA);
+  renderHome();
+  showScreen('home');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'home'));
+}
+
+function doSearch(){
+  const q = document.getElementById('search-input').value.trim();
+  const results = document.getElementById('search-results');
+  if(!q){
+    results.innerHTML = `<div class="empty-state"><div class="icon">⌕</div>اكتب اسمًا للبحث عنه في كل الاجتماعات</div>`;
+    return;
+  }
+  let matches = [];
+  DATA.meetings.forEach(mt => {
+    mt.people.forEach(p => {
+      if(p.name.includes(q)){
+        matches.push({...p, meetingName: mt.name, meetingId: mt.id});
+      }
+    });
+  });
+  if(matches.length === 0){
+    results.innerHTML = `<div class="empty-state"><div class="icon">◎</div>لا توجد نتائج مطابقة لـ "${q}"</div>`;
+    return;
+  }
+  results.innerHTML = matches.map(p => `
+    <div class="person-row" style="cursor:pointer" onclick="openDetail(${p.meetingId})">
+      <div class="idx">${p.m !== null && p.m !== undefined ? p.m : ''}</div>
+      <div class="pname">${p.name}<span class="result-meeting-tag">${p.meetingName}</span></div>
+      <div class="pamt">${fmt(p.amount)} ج</div>
+    </div>
+  `).join('');
+}
+
+function renderStats(){
+  const maxAmt = Math.max(...DATA.meetings.map(m => m.officialAmount));
+  const maxCases = Math.max(...DATA.meetings.map(m => m.officialCases));
+  document.getElementById('stats-bars').innerHTML = DATA.meetings.map(m => `
+    <div class="bar-row">
+      <div class="bar-label"><span class="nm">${m.name}</span><span class="vl">${fmt(m.officialAmount)} ج</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(m.officialAmount/maxAmt*100).toFixed(1)}%"></div></div>
+    </div>
+  `).join('');
+  document.getElementById('stats-bars-cases').innerHTML = DATA.meetings.map(m => `
+    <div class="bar-row">
+      <div class="bar-label"><span class="nm">${m.name}</span><span class="vl">${fmt(m.officialCases)} حالة</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(m.officialCases/maxCases*100).toFixed(1)}%"></div></div>
+    </div>
+  `).join('');
+}
+
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function switchTab(name){
+  showScreen(name);
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  if(name === 'search'){ doSearch(); setTimeout(()=>document.getElementById('search-input').focus(), 50); }
+  if(name === 'stats'){ renderStats(); }
+  if(name === 'settings'){
+    document.getElementById('drive-url-input').value = getDriveUrl();
+    document.getElementById('drive-test-result').textContent = '';
+  }
+}
+
+async function init(){
+  const cached = loadLocalCache();
+  if(cached){ DATA = cached; }
+  renderHome();
+
+  const url = getDriveUrl();
+  if(url){
+    await pullFromDrive(true);
+  } else {
+    setSyncStatus('idle', 'غير مرتبط بجوجل درايف — التعديلات تُحفظ محليًا فقط');
+    saveLocalCache();
+  }
+
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').catch(()=>{ /* offline shell unavailable */ });
+  }
+}
+
+init();
+</script>
+</body>
+</html>
