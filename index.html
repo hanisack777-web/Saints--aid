@@ -422,6 +422,33 @@ body{
   border-radius:10px; padding:10px; font-weight:700; font-size:13px; cursor:pointer;
 }
 .settings-note{ font-size:11.5px; color:var(--text-soft); margin-top:8px; }
+
+/* ---- Year selector ---- */
+.year-bar{
+  display:flex; gap:8px; overflow-x:auto; padding: 2px 2px 12px; margin: 0 -2px 6px;
+  -webkit-overflow-scrolling: touch;
+}
+.year-bar::-webkit-scrollbar{ display:none; }
+.year-chip{
+  flex-shrink:0; border:1px solid var(--border); background:var(--surface); color:var(--text-soft);
+  border-radius:999px; padding:8px 16px; font-family:'Tajawal',sans-serif; font-weight:700;
+  font-size:13px; cursor:pointer; white-space:nowrap;
+}
+.year-chip.active{ background:var(--accent); border-color:var(--accent); color:#fff8ec; }
+.year-chip.add{ background:transparent; border-style:dashed; color:var(--accent); }
+
+/* ---- Home edit (meetings list) ---- */
+.section-title .edit-toggle-btn{ font-size:11.5px; padding:6px 10px; }
+.meeting-card.home-edit{ align-items:center; }
+.meeting-card .mini-del{
+  width:30px; height:30px; border-radius:9px; border:1px solid rgba(180,50,50,.35);
+  background:rgba(180,50,50,.08); color:#b43232; font-size:14px; cursor:pointer; flex-shrink:0;
+}
+.add-meeting-btn{
+  width:100%; border:1.5px dashed var(--border); background:transparent; color:var(--accent);
+  border-radius:14px; padding:14px; font-family:'Tajawal',sans-serif; font-weight:700;
+  font-size:14px; cursor:pointer; margin-top:6px; margin-bottom:14px;
+}
 </style>
 </head>
 <body>
@@ -441,6 +468,8 @@ body{
 
   <!-- HOME -->
   <div class="screen active" id="screen-home">
+    <div class="year-bar" id="year-bar"></div>
+
     <div class="stats-grid">
       <div class="stat-card wide">
         <span class="num" id="s-grand">—</span>
@@ -464,7 +493,10 @@ body{
       </div>
     </div>
 
-    <div class="section-title">الاجتماعات <small id="meet-count-lbl"></small></div>
+    <div class="section-title">
+      <span>الاجتماعات <small id="meet-count-lbl"></small></span>
+      <button class="edit-toggle-btn" id="home-edit-btn" onclick="toggleHomeEdit()">✎ تعديل القائمة</button>
+    </div>
     <div id="meeting-list"></div>
   </div>
 
@@ -519,6 +551,13 @@ body{
       </div>
     </div>
     <p class="settings-note" style="margin-top:14px;">بدون ربط جوجل درايف، التعديلات تُحفظ محليًا على هذا الجهاز فقط (داخل المتصفح).</p>
+
+    <div class="section-title" style="margin-top:22px;">إدارة السنوات</div>
+    <div class="settings-card">
+      <p class="settings-help">كل سنة لها اجتماعاتها ومساعداتها الخاصة. يمكنك إضافة سنة جديدة من شريط السنوات أعلى الشاشة الرئيسية.</p>
+      <span class="field-label">حذف السنة المعروضة حاليًا: <b id="current-year-label-settings">—</b></span>
+      <button class="settings-btn-secondary" style="margin-top:8px; color:#b43232; border-color:rgba(180,50,50,.35);" onclick="deleteCurrentYear()">حذف هذه السنة نهائيًا</button>
+    </div>
   </div>
 
   <div class="bottom-nav">
@@ -538,7 +577,7 @@ body{
   <div class="toast" id="toast"></div>
 </div>
 
-<script id="app-data" type="application/json">{"meetings": [{"id": 1, "name": "اجتماع مغاغة", "officialCases": 12, "officialAmount": 100000, "committee": "جميل مختار - لطفي يونان", "people": [{"m": 1, "name": "عطا شنودة", "amount": 8000, "note": null}, {"m": 2, "name": "رفعت إبراهيم", "amount": 12000, "note": null}, {"m": 3, "name": "هاني فايز شاكر", "amount": 4000, "note": null}, {"m": 4, "name": "ماجد صفوت", "amount": 5000, "note": null}, {"m": 5, "name": "نادية عطية", "amount": 7000, "note": null}, {"m": 6, "name": "فايزة لبيب", "amount": 4000, "note": null}, {"m": 7, "name": "ام رأفت يوسف فايز", "amount": 8000, "note": null}, {"m": 8, "name": "نسرين رسمي", "amount": 8000, "note": null}, {"m": 9, "name": "وهيبة ساويرس", "amount": 8000, "note": null}, {"m": 10, "name": "فادية اسحق عبد المسيح", "amount": 6000, "note": null}, {"m": 11, "name": "نادية ارملة مدحت متياس", "amount": 6000, "note": null}, {"m": 11, "name": "هناء ارملة وفيق البدري", "amount": 5000, "note": null}, {"m": 12, "name": "سلوي رفعت إبراهيم", "amount": 10000, "note": null}, {"m": 13, "name": "مريم ميخائيل إبراهيم", "amount": 5000, "note": null}, {"m": null, "name": "طوارئ", "amount": 4000, "note": null}], "computedTotal": 100000, "computedCount": 15}, {"id": 2, "name": "اجتماع بني مزار", "officialCases": 15, "officialAmount": 106000, "committee": "يعقوب جاد - حنا اسحق", "people": [{"m": 1, "name": "ارملة المرحوم كامل حنا", "amount": 6000, "note": null}, {"m": 2, "name": "الأخ عاطف جرجس", "amount": 15000, "note": null}, {"m": 3, "name": "سليمان رشدي", "amount": 6000, "note": null}, {"m": 4, "name": "ايمان فوزي", "amount": 6000, "note": null}, {"m": 5, "name": "ام مينا سمير", "amount": 6000, "note": null}, {"m": 6, "name": "ام بيشوي ناصر", "amount": 6000, "note": null}, {"m": 7, "name": "نبيل  ميخائيل", "amount": 10000, "note": null}, {"m": 8, "name": "رحمة حنين", "amount": 8000, "note": null}, {"m": 9, "name": "سامية ملاك", "amount": 6000, "note": null}, {"m": 10, "name": "عفة عبد المسيح", "amount": 8000, "note": null}, {"m": 11, "name": "عازر شفيق", "amount": 8000, "note": null}, {"m": 12, "name": "كمال كامل", "amount": 5000, "note": null}, {"m": 13, "name": "كمال خليل ( زواج ابنته)", "amount": 8000, "note": null}, {"m": 14, "name": "ام يوسف", "amount": 2000, "note": null}, {"m": 15, "name": "اسرة المرحوم ايمن رزق", "amount": 6000, "note": null}], "computedTotal": 106000, "computedCount": 15}, {"id": 3, "name": "اجتماع الشيخ زياد", "officialCases": 29, "officialAmount": 118000, "committee": "هاني مختار - نبيل خليل", "people": [{"m": 1, "name": "فايق صدقي رزق", "amount": 6000, "note": null}, {"m": 2, "name": "مريم نصر برسوم", "amount": 3000, "note": null}, {"m": 3, "name": "نعمة فؤاد نصيف", "amount": 5000, "note": null}, {"m": 4, "name": "نادية نجيب إبراهيم", "amount": 5000, "note": null}, {"m": 5, "name": "سوسو منير فهمي مسعد", "amount": 4000, "note": null}, {"m": 6, "name": "نور عياد حنا", "amount": 4000, "note": null}, {"m": 7, "name": "عيد يوسف جرجس", "amount": 2000, "note": null}, {"m": 8, "name": "نعمة صالح حبيب", "amount": 2500, "note": null}, {"m": 9, "name": "عايدة ثابت يونان", "amount": 4000, "note": null}, {"m": 10, "name": "هالة عماد ساوريس خليل", "amount": 3500, "note": null}, {"m": 11, "name": "عطا الله وديع عطا الله", "amount": 8000, "note": null}, {"m": 12, "name": "برسوم فؤاد برسوم", "amount": 4000, "note": null}, {"m": 13, "name": "فتحية منير فهمي", "amount": 2000, "note": null}, {"m": 14, "name": "سامح عطا الله وديع", "amount": 1500, "note": null}, {"m": 15, "name": "سنية وديع عطا الله", "amount": 2000, "note": null}, {"m": 16, "name": "عيد بولس خليل", "amount": 6000, "note": null}, {"m": 17, "name": "زوزة عزيز فانوس", "amount": 2000, "note": null}, {"m": 18, "name": "سهير نور عياد حنا", "amount": 4000, "note": null}, {"m": 19, "name": "سارة فهمي ابراهيم", "amount": 6000, "note": null}, {"m": 20, "name": "يوسف عاشور اسعد", "amount": 5000, "note": null}, {"m": 21, "name": "متي سعد صادق", "amount": 4000, "note": null}, {"m": 22, "name": "مارتن امير عادل", "amount": 4000, "note": null}, {"m": 23, "name": "زغلول حبيب فهيم", "amount": 2000, "note": null}, {"m": 24, "name": "عماد حنا واصف", "amount": 2000, "note": null}, {"m": 25, "name": "ثابت عادل ثابت", "amount": 2000, "note": null}, {"m": 26, "name": "سميرة نبيل خليل", "amount": 3000, "note": null}, {"m": 27, "name": "فرح فايز يوسف", "amount": 2000, "note": null}, {"m": 28, "name": "جون عادل حنا", "amount": 5000, "note": null}, {"m": 29, "name": "عادل جرجس يوسف", "amount": 3000, "note": null}, {"m": 30, "name": "نادية هاني", "amount": 8000, "note": null}, {"m": null, "name": "طوارئ", "amount": 3500, "note": null}], "computedTotal": 118000, "computedCount": 31}, {"id": 4, "name": "اجتماع سلاقوس", "officialCases": 46, "officialAmount": 115700, "committee": "عماد عطية - أبو باسم", "people": [{"m": 1, "name": "سمير صالح بطرس", "amount": 3200, "note": null}, {"m": 24, "name": "إسكندر محروس عزيز", "amount": 2000, "note": null}, {"m": 2, "name": "فتحي ناروز كامل", "amount": 3000, "note": null}, {"m": 25, "name": "النونة حنا رزق الله", "amount": 2000, "note": null}, {"m": 3, "name": "نادي امين رزق الله", "amount": 3000, "note": null}, {"m": 26, "name": "سامية فايق بطرس", "amount": 3000, "note": null}, {"m": 4, "name": "كيرلس عاطف ثابت", "amount": 2250, "note": null}, {"m": 27, "name": "عدلية جرجس عازر", "amount": 1000, "note": null}, {"m": 5, "name": "أنور وليم  كامل", "amount": 2000, "note": null}, {"m": 28, "name": "سامية فهمي عازر", "amount": 1000, "note": null}, {"m": 6, "name": "كمال  عياد إبراهيم", "amount": 2500, "note": null}, {"m": 29, "name": "سميرة فهمي خليل", "amount": 2000, "note": null}, {"m": 7, "name": "فايز عزيز ايوب", "amount": 7000, "note": null}, {"m": 30, "name": "نادية فهمي حنا", "amount": 1000, "note": null}, {"m": 8, "name": "عايدة عبد المسيح حنا", "amount": 3000, "note": null}, {"m": 31, "name": "فتحية ذكي جرجس", "amount": 1000, "note": null}, {"m": 9, "name": "عبد المسيح أيوب فام", "amount": 2500, "note": null}, {"m": 32, "name": "مريم يوسف متي", "amount": 4000, "note": null}, {"m": 10, "name": "شكري أيوب فام", "amount": 2000, "note": null}, {"m": 33, "name": "هدية فايز شاكر", "amount": 2000, "note": null}, {"m": 11, "name": "عادل ابراهيم شحاتة", "amount": 2500, "note": null}, {"m": 34, "name": "عدلية يوسف غبريال", "amount": 1500, "note": null}, {"m": 12, "name": "ميلاد فايز شاكر", "amount": 12000, "note": null}, {"m": 35, "name": "وديعة فايق بطرس", "amount": 1500, "note": null}, {"m": 13, "name": "رضا امين رزق الله", "amount": 3000, "note": null}, {"m": 36, "name": "منيرة حنا صادق", "amount": 2000, "note": null}, {"m": 14, "name": "محب صفوت كامل", "amount": 5000, "note": null}, {"m": 37, "name": "عايدة شحاته خليل", "amount": 1500, "note": null}, {"m": 15, "name": "نادي عياد عبد المسيح", "amount": 7000, "note": null}, {"m": 38, "name": "فوزية كامل يوسف", "amount": 2000, "note": null}, {"m": 16, "name": "نصحي ثابت حليم", "amount": 1250, "note": null}, {"m": 39, "name": "نعمة عزيز أيوب", "amount": 3000, "note": null}, {"m": 17, "name": "مجدي لويس حليم", "amount": 2000, "note": null}, {"m": 40, "name": "عادل عطية وليم", "amount": 1000, "note": null}, {"m": 18, "name": "حنان فايق بطرس", "amount": 1500, "note": null}, {"m": 41, "name": "سوزان يسي اسحق", "amount": 2000, "note": null}, {"m": 19, "name": "نورة وليم كامل", "amount": 1000, "note": null}, {"m": 42, "name": "فاروق يوسف إبراهيم", "amount": 2000, "note": null}, {"m": 20, "name": "صباح ثابت رزق الله", "amount": 2500, "note": null}, {"m": 43, "name": "شاكر عدلي شاكر", "amount": 1000, "note": null}, {"m": 21, "name": "سميرة رياض حنا", "amount": 1500, "note": null}, {"m": 44, "name": "نجاح سمير فرج", "amount": 1500, "note": null}, {"m": 22, "name": "سميرة شحاته حنا", "amount": 1500, "note": null}, {"m": 45, "name": "نبيل شكري ايوب", "amount": 2000, "note": null}, {"m": 23, "name": "حنان مايز بطرس", "amount": 2500, "note": null}, {"m": 46, "name": "فليب عيد كمال", "amount": 2000, "note": null}], "computedTotal": 115700, "computedCount": 46}, {"id": 5, "name": "عزبة بطرس", "officialCases": 32, "officialAmount": 75000, "committee": "ناثان عطية - نمر رشدي", "people": [{"m": 1, "name": "مجدي بطرس عبد الشهيد", "amount": 2500, "note": null}, {"m": 2, "name": "سناء شفيق عبد النور", "amount": 2000, "note": null}, {"m": 3, "name": "نشوي عيد عطية", "amount": 3000, "note": null}, {"m": 4, "name": "فايزة إبراهيم متي", "amount": 3000, "note": null}, {"m": 5, "name": "كيريا خليل عطية", "amount": 2500, "note": null}, {"m": 6, "name": "شارود حنا فهيم", "amount": 2500, "note": null}, {"m": 7, "name": "ماجد فرج الله جيد", "amount": 2500, "note": null}, {"m": 8, "name": "صباح عطية مرزوق", "amount": 2000, "note": null}, {"m": 9, "name": "اليصابات عوض عبد الشهيد", "amount": 2500, "note": null}, {"m": 10, "name": "اعتدال لمعي ناشد", "amount": 1500, "note": null}, {"m": 11, "name": "منيرة اخنوخ كامل", "amount": 2000, "note": null}, {"m": 12, "name": "مكاسب ميخائيل دانيال", "amount": 2500, "note": null}, {"m": 13, "name": "محب رمزي شاكر", "amount": 2000, "note": null}, {"m": 14, "name": "رضا اسحق متي", "amount": 2000, "note": null}, {"m": 15, "name": "اشرف صموئيل فاروق", "amount": 2500, "note": null}, {"m": 16, "name": "عطا الله فاروق حبيب", "amount": 2500, "note": null}, {"m": 17, "name": "سعدية اديب كامل", "amount": 2500, "note": null}, {"m": 18, "name": "عاطف كامل برسوم", "amount": 1500, "note": null}, {"m": 19, "name": "فارس اسحق متي", "amount": 2500, "note": null}, {"m": 20, "name": "فايز إبراهيم متي", "amount": 2000, "note": null}, {"m": 21, "name": "عفاف رمزي شاكر", "amount": 2000, "note": null}, {"m": 22, "name": "موسي السيد موسي", "amount": 2000, "note": null}, {"m": 23, "name": "عيد وليم حنا", "amount": 2500, "note": null}, {"m": 24, "name": "نشأت ميخائيل حنا", "amount": 2500, "note": null}, {"m": 25, "name": "عزت هور إبراهيم", "amount": 2500, "note": null}, {"m": 26, "name": "عايدة السيد حنا", "amount": 2000, "note": null}, {"m": 27, "name": "فايقة شفيق عبد النور", "amount": 2000, "note": null}, {"m": 28, "name": "كرستين لطف رزق الله", "amount": 2500, "note": null}, {"m": 29, "name": "نرمين عطية خليل", "amount": 2000, "note": null}, {"m": 30, "name": "صبحي السيد حنا", "amount": 2000, "note": null}, {"m": 31, "name": "يونان السيد حنا", "amount": 2000, "note": null}, {"m": 32, "name": "ناثان عطية ( دروس لابنه)", "amount": 5000, "note": null}], "computedTotal": 75000, "computedCount": 32}, {"id": 6, "name": "اشنين النصاري", "officialCases": 29, "officialAmount": 70000, "committee": "مينا جمال - جرجس", "people": [{"m": 1, "name": "يوسف مسعود السيد", "amount": 3000, "note": null}, {"m": 2, "name": "سعيدة هنري ميخائيل", "amount": 1500, "note": null}, {"m": 3, "name": "ملاك حنا تاوضروس", "amount": 1500, "note": null}, {"m": 4, "name": "فرحة فوزي سلامة", "amount": 2000, "note": null}, {"m": 5, "name": "منال لويز نجيب", "amount": 3000, "note": null}, {"m": 6, "name": "اماليا استفانوس خليل", "amount": 3000, "note": null}, {"m": 7, "name": "نادية حنين ميخائيل", "amount": 2000, "note": null}, {"m": 8, "name": "جمالات وجيه حلمي", "amount": 2000, "note": null}, {"m": 9, "name": "ميرفت سيد ثابت", "amount": 3000, "note": null}, {"m": 10, "name": "صلاح عبد الملاك حنا", "amount": 3000, "note": null}, {"m": 11, "name": "ماجدة رضا نجيب", "amount": 2000, "note": null}, {"m": 12, "name": "جميلة فايز عبده", "amount": 2000, "note": null}, {"m": 13, "name": "نادية حنا يوسف", "amount": 1500, "note": null}, {"m": 14, "name": "سامية إبراهيم شحاته", "amount": 1500, "note": null}, {"m": 15, "name": "ثريا اسحق مليكة", "amount": 1500, "note": null}, {"m": 16, "name": "عايدة حنا", "amount": 1500, "note": null}, {"m": 17, "name": "ايزيس هواش السيد", "amount": 1500, "note": null}, {"m": 18, "name": "نعمة عادل حنا", "amount": 3000, "note": null}, {"m": 19, "name": "عيدة حبيب رزق", "amount": 2500, "note": null}, {"m": 20, "name": "جيهان نجيب كامل", "amount": 2500, "note": null}, {"m": 21, "name": "نادية السيد حنا", "amount": 2500, "note": null}, {"m": 22, "name": "عبير عادل رزق", "amount": 2500, "note": null}, {"m": 23, "name": "مريم سعيد كامل", "amount": 2000, "note": null}, {"m": 24, "name": "كريستين جيد نعيم", "amount": 3000, "note": null}, {"m": 25, "name": "هناء إبراهيم شحاته", "amount": 2000, "note": null}, {"m": 26, "name": "امال سمير يوسف", "amount": 2000, "note": null}, {"m": 27, "name": "رضا ميخائيل بشارة", "amount": 3000, "note": null}, {"m": 28, "name": "مريم داود زاخر", "amount": 2000, "note": null}, {"m": 29, "name": "سمير حلمي ثابت", "amount": 2500, "note": null}, {"m": 30, "name": "طوارئ", "amount": 5000, "note": null}], "computedTotal": 70000, "computedCount": 30}, {"id": 7, "name": "اجتماع حبيب لطف الله", "officialCases": 34, "officialAmount": 61000, "committee": "حنا حبيب - رؤوف فرج الله", "people": [{"m": 1, "name": "اسحق عياد اسحق", "amount": 1200, "note": null}, {"m": 2, "name": "برسيس حنا الله", "amount": 1200, "note": null}, {"m": 3, "name": "شكرية صدقي لبيب", "amount": 1200, "note": null}, {"m": 4, "name": "نادية شحاته", "amount": 1200, "note": null}, {"m": 5, "name": "غطاس نبيل يوسف", "amount": 1200, "note": null}, {"m": 6, "name": "هدية بشري صالح", "amount": 1200, "note": null}, {"m": 7, "name": "جورج يوسف", "amount": 1500, "note": null}, {"m": 8, "name": "حنان موسي", "amount": 1500, "note": null}, {"m": 9, "name": "تهاني رشدي", "amount": 1500, "note": null}, {"m": 10, "name": "وهيب يوسف", "amount": 1000, "note": null}, {"m": 11, "name": "مريم محروس", "amount": 1500, "note": null}, {"m": 12, "name": "سنة شحاته", "amount": 1000, "note": null}, {"m": 13, "name": "منيرة فرج الله", "amount": 1200, "note": null}, {"m": 14, "name": "عفاف حنا الله", "amount": 1200, "note": null}, {"m": 15, "name": "حنا فريج صادق", "amount": 1200, "note": null}, {"m": 16, "name": "مريم مجدي", "amount": 1500, "note": null}, {"m": 17, "name": "سارة صالح", "amount": 1500, "note": null}, {"m": 18, "name": "عفاف قدسي", "amount": 1500, "note": null}, {"m": 19, "name": "فيبي سمير", "amount": 1500, "note": null}, {"m": 20, "name": "ميلاد إبراهيم", "amount": 1500, "note": null}, {"m": 21, "name": "غالية حنا الله", "amount": 1500, "note": null}, {"m": 22, "name": "نورة شفيق بباوي", "amount": 1000, "note": null}, {"m": 23, "name": "فخري حنا الله", "amount": 5000, "note": null}, {"m": 24, "name": "جاكلين فخري", "amount": 1000, "note": null}, {"m": 25, "name": "تريزة فريز", "amount": 2500, "note": null}, {"m": 26, "name": "عايدة شحاته حنا", "amount": 1500, "note": null}, {"m": 27, "name": "دامرس جورج", "amount": 1500, "note": null}, {"m": 28, "name": "مسعودة حلمي", "amount": 1500, "note": null}, {"m": 29, "name": "هناء شكري", "amount": 3000, "note": null}, {"m": 30, "name": "امير جورج", "amount": 1500, "note": null}, {"m": 31, "name": "حنونة شكر الله", "amount": 1500, "note": null}, {"m": 32, "name": "سلوى مكرم", "amount": 1500, "note": null}, {"m": 33, "name": "نادية بباوي فلتس", "amount": 1500, "note": null}, {"m": 34, "name": "زكريا فرج الله", "amount": 1500, "note": null}, {"m": 35, "name": "طوارئ", "amount": 3700, "note": null}, {"m": 36, "name": "أبو ديفيد خضار", "amount": 5000, "note": null}], "computedTotal": 61000, "computedCount": 36}, {"id": 8, "name": "اجتماع الزاوية", "officialCases": 25, "officialAmount": 80000, "committee": "مجدي مكرم - مجدي نصحي", "people": [{"m": 1, "name": "نجاة ناشد بشارة", "amount": 3000, "note": null}, {"m": 2, "name": "حنان ذكي خليل", "amount": 3000, "note": null}, {"m": 3, "name": "عدلية مكرم ذكي", "amount": 3000, "note": null}, {"m": 4, "name": "مينا عيد امين", "amount": 3000, "note": null}, {"m": 5, "name": "جميلات لبيب شحاته", "amount": 3000, "note": null}, {"m": 6, "name": "مرسا حلمي دانيال", "amount": 3000, "note": null}, {"m": 7, "name": "ماريان فرح", "amount": 3000, "note": null}, {"m": 8, "name": "فيفي وجيه امين", "amount": 3000, "note": null}, {"m": 9, "name": "صباح رضا ابراهيم", "amount": 3000, "note": null}, {"m": 10, "name": "نبيلة عماد مجدي", "amount": 3000, "note": null}, {"m": 11, "name": "عياد ذكي عياد", "amount": 3000, "note": null}, {"m": 12, "name": "ميرفت عاطف نجيب", "amount": 3000, "note": null}, {"m": 13, "name": "ناجي حنين حنا", "amount": 3000, "note": null}, {"m": 14, "name": "نادية حنين حنا", "amount": 3000, "note": null}, {"m": 15, "name": "شحاته اسعد حنين", "amount": 3000, "note": null}, {"m": 16, "name": "وليد وهيب ذكي", "amount": 3000, "note": null}, {"m": 17, "name": "شوقي وجيه امين", "amount": 3000, "note": null}, {"m": 18, "name": "أسرة سامح سيد فهمي", "amount": 3000, "note": null}, {"m": 19, "name": "منصور وهيب ذكي", "amount": 3000, "note": null}, {"m": 20, "name": "عاطف اسحق ذكي", "amount": 3000, "note": null}, {"m": 21, "name": "فايق ذكي خليل", "amount": 3000, "note": null}, {"m": 22, "name": "ايمن ماهر فهمي", "amount": 3000, "note": null}, {"m": 23, "name": "زوجة وديع جميل", "amount": 3000, "note": null}, {"m": 24, "name": "رضا إبراهيم", "amount": 3000, "note": null}, {"m": 25, "name": "مينا رضا", "amount": 3000, "note": null}, {"m": 25, "name": "طوارئ", "amount": 5000, "note": null}], "computedTotal": 80000, "computedCount": 26}, {"id": 9, "name": "اجتماع إبراهيم عبد السيد", "officialCases": 56, "officialAmount": 79500, "committee": "إبراهيم عزيز - رضا فايز", "people": [{"m": 1, "name": "دولت فهمي اسحق", "amount": 1500, "note": null}, {"m": 2, "name": "مريم فرج وهبة", "amount": 2500, "note": null}, {"m": 3, "name": "كاميليا صادق كامل", "amount": 1500, "note": null}, {"m": 4, "name": "نعمات نجيب باراباس", "amount": 2000, "note": null}, {"m": 5, "name": "شحاته عطية عبد الملاك", "amount": 2000, "note": null}, {"m": 6, "name": "إبراهيم عزيز نجيب", "amount": 3000, "note": null}, {"m": 7, "name": "عادل صموئيل حليم", "amount": 3000, "note": null}, {"m": 8, "name": "بطرس تيموثاوس حليم", "amount": 2500, "note": null}, {"m": 9, "name": "مرثا حنا عزيز", "amount": 2000, "note": null}, {"m": 10, "name": "فايز ابراهيم جرجس", "amount": 1500, "note": null}, {"m": 11, "name": "مكرم ذكي اسعد", "amount": 2000, "note": null}, {"m": 12, "name": "نعمة عاطف شفيق", "amount": 500, "note": null}, {"m": 13, "name": "فايزة صادق  كامل", "amount": 1500, "note": null}, {"m": 14, "name": "عواطف عزمي حنا", "amount": 1000, "note": null}, {"m": 15, "name": "فرحة شحات عطية", "amount": 1000, "note": null}, {"m": 16, "name": "عايشة حليم مقار", "amount": 1000, "note": null}, {"m": 17, "name": "صباحية عزمي امين", "amount": 500, "note": null}, {"m": 18, "name": "ملاك عطية عبد الملاك", "amount": 2000, "note": null}, {"m": 19, "name": "ملاك صادق جرجس", "amount": 1500, "note": null}, {"m": 20, "name": "سامية سيد باراباس", "amount": 800, "note": null}, {"m": 21, "name": "وديع فتحي ذكى", "amount": 500, "note": null}, {"m": 22, "name": "فرحة توفيق ام مجدى فهمى", "amount": 1000, "note": null}, {"m": 23, "name": "رزق وليم بطرس", "amount": 1000, "note": null}, {"m": 24, "name": "غالية صادق جرجس", "amount": 1200, "note": null}, {"m": 25, "name": "فريزة شحاته", "amount": 500, "note": null}, {"m": 26, "name": "فرج كامل  سيحة", "amount": 2000, "note": null}, {"m": 27, "name": "سعدة حبيب", "amount": 800, "note": null}, {"m": 28, "name": "رشا جرجس", "amount": 1000, "note": null}, {"m": 29, "name": "عزمي امين عوض", "amount": 2000, "note": null}, {"m": 30, "name": "فوزية باراباس", "amount": 1000, "note": null}, {"m": 31, "name": "بلسيم فخري حنين", "amount": 1000, "note": null}, {"m": 32, "name": "عطيات اسعد  حنين", "amount": 800, "note": null}, {"m": 33, "name": "ناجي فهمي عبد الملاك", "amount": 500, "note": null}, {"m": 34, "name": "عطيات ابراهيم بباوي", "amount": 1000, "note": null}, {"m": 35, "name": "شحاته امين ابراهيم", "amount": 1500, "note": null}, {"m": 36, "name": "فوزية صادق عبد الملاك", "amount": 1000, "note": null}, {"m": 37, "name": "جرجس غالي جرجس", "amount": 1000, "note": null}, {"m": 38, "name": "أشرف شحاته صموئيل", "amount": 1200, "note": null}, {"m": 39, "name": "ارملة مصلح عطية", "amount": 1500, "note": null}, {"m": 40, "name": "عزيز نجيب سيحة", "amount": 1500, "note": null}, {"m": 41, "name": "عايدة شحاته", "amount": 800, "note": null}, {"m": 42, "name": "حنان شحاته عبد الملاك", "amount": 1500, "note": null}, {"m": 43, "name": "جوهرة زوجة محروس", "amount": 800, "note": null}, {"m": 44, "name": "زوجة مفيد سعيد", "amount": 800, "note": null}, {"m": 45, "name": "زوجة عيد لمعي", "amount": 500, "note": null}, {"m": 46, "name": "امير ناجي كامل", "amount": 1500, "note": null}, {"m": 47, "name": "زوجة رفعت نجيب", "amount": 500, "note": null}, {"m": 48, "name": "نوره ملاك", "amount": 1000, "note": null}, {"m": 49, "name": "زوجة وليد يعقوب", "amount": 800, "note": null}, {"m": 50, "name": "مريم اسعد", "amount": 500, "note": null}, {"m": 51, "name": "زوجة ابانوب ميلاد", "amount": 500, "note": null}, {"m": 52, "name": "مريم حنا", "amount": 500, "note": null}, {"m": 53, "name": "نوره سامي ذكي", "amount": 2500, "note": null}, {"m": 54, "name": "سامية فخري", "amount": 2500, "note": null}, {"m": 55, "name": "نادية صادق", "amount": 500, "note": null}, {"m": 56, "name": "بنت الأخ إبراهيم درس", "amount": 4000, "note": null}, {"m": 57, "name": "طوارئ", "amount": 5000, "note": null}], "computedTotal": 79500, "computedCount": 57}, {"id": 10, "name": "اجتماع جزيرة شارونة", "officialCases": 24, "officialAmount": 71500, "committee": "سلطان سعد - ارنست عطية", "people": [{"m": 1, "name": "فالح إسكندر معوض", "amount": 1000, "note": null}, {"m": 2, "name": "اليشع حنا يوسف", "amount": 2000, "note": null}, {"m": 3, "name": "اماني حمدي استفانوس", "amount": 1500, "note": null}, {"m": 4, "name": "امال مايز جرجس", "amount": 3000, "note": null}, {"m": 5, "name": "نبيلة عادل فريد", "amount": 1500, "note": null}, {"m": 6, "name": "مريم وهبة عبيد", "amount": 2500, "note": null}, {"m": 7, "name": "فرح إبراهيم يوسف", "amount": 8000, "note": null}, {"m": 8, "name": "اماني صبحي ناشد", "amount": 1500, "note": null}, {"m": 9, "name": "ايلين ابراهيم معوض", "amount": 3000, "note": null}, {"m": 10, "name": "فرحة عوض جرجس", "amount": 2000, "note": null}, {"m": 11, "name": "شهدي رجائي فكري", "amount": 3000, "note": null}, {"m": 12, "name": "إبراهيم فريد مرقس", "amount": 2500, "note": null}, {"m": 13, "name": "عماد إبراهيم معوض", "amount": 4000, "note": null}, {"m": 14, "name": "ماري نصر سعد", "amount": 2000, "note": null}, {"m": 15, "name": "عفيفة نعيم توفيق", "amount": 7000, "note": null}, {"m": 16, "name": "فادية كسبان حبيب", "amount": 3000, "note": null}, {"m": 17, "name": "هبة سبع حنا", "amount": 3000, "note": null}, {"m": 18, "name": "ايمان هاني ذكري", "amount": 1500, "note": null}, {"m": 19, "name": "عادل فريد مرقس", "amount": 1500, "note": null}, {"m": 20, "name": "ام يوثام حنان", "amount": 2500, "note": null}, {"m": 21, "name": "حنان مرقس فريد", "amount": 6000, "note": null}, {"m": 22, "name": "فادية إبراهيم مهني", "amount": 1500, "note": null}, {"m": 23, "name": "نبيل ذكي", "amount": 3000, "note": null}, {"m": 24, "name": "سلطان سعد", "amount": 5000, "note": null}], "computedTotal": 71500, "computedCount": 24}, {"id": 11, "name": "اجتماع شارونة", "officialCases": 19, "officialAmount": 42000, "committee": "يوسف خميس - مختار خميس", "people": [{"m": 1, "name": "عواطف صليب مرقس", "amount": 2000, "note": null}, {"m": 2, "name": "سامي حبيب سوريال", "amount": 2000, "note": null}, {"m": 3, "name": "اوجيني يوسف عطية", "amount": 1500, "note": null}, {"m": 4, "name": "عايدة لبيب عبد الشهيد", "amount": 2000, "note": null}, {"m": 5, "name": "راعوث كامل", "amount": 1500, "note": null}, {"m": 6, "name": "فرحان جرجس عطية", "amount": 2000, "note": null}, {"m": 7, "name": "ماجدة رزق فرج", "amount": 1500, "note": null}, {"m": 8, "name": "مرثا كامل ناشد", "amount": 1500, "note": null}, {"m": 9, "name": "عاطف صليب مرقس", "amount": 2000, "note": null}, {"m": 10, "name": "حنان سعد برسوم", "amount": 2000, "note": null}, {"m": 11, "name": "سعدية يوسف", "amount": 1500, "note": null}, {"m": 12, "name": "اليس ميخائيل", "amount": 1500, "note": null}, {"m": 13, "name": "عاطف فرحان", "amount": 1500, "note": null}, {"m": 14, "name": "سماح عاطف", "amount": 2000, "note": null}, {"m": 15, "name": "مرثا نصحي", "amount": 1500, "note": null}, {"m": 16, "name": "نوال فايز شفيق", "amount": 1000, "note": null}, {"m": 17, "name": "ماجدة رشدي هندي", "amount": 1500, "note": null}, {"m": 18, "name": "هنية لطيف حنا", "amount": 1500, "note": null}, {"m": 19, "name": "نعمة شحاته يعقوب", "amount": 2000, "note": null}, {"m": null, "name": "عملية قلب مفتوح الأخ يوسف", "amount": 10000, "note": null}], "computedTotal": 42000, "computedCount": 20}, {"id": 12, "name": "اجتماع أبو جلبان", "officialCases": 14, "officialAmount": 96000, "committee": "رأفت مكرم - شحاته حنا", "people": [{"m": 1, "name": "ميلاد خميس حنا", "amount": 8000, "note": null}, {"m": 2, "name": "عوض صليب عبد المسيح", "amount": 10000, "note": null}, {"m": 3, "name": "جودة فتحي ذكري", "amount": 8000, "note": null}, {"m": 4, "name": "كريم نجيب حنا", "amount": 8000, "note": null}, {"m": 5, "name": "ماهر عيد شكري", "amount": 8000, "note": null}, {"m": 6, "name": "فوزية زخاري حنا", "amount": 4000, "note": null}, {"m": 7, "name": "نورهان مدحت ميلاد", "amount": 4000, "note": null}, {"m": 8, "name": "سامي ملاك شكري", "amount": 6000, "note": null}, {"m": 9, "name": "صباح فضل الله", "amount": 6000, "note": null}, {"m": 10, "name": "امين صلاح عبد المسيح", "amount": 5000, "note": null}, {"m": 11, "name": "محفوظ عيد اسحق", "amount": 5000, "note": null}, {"m": 12, "name": "رأفت مكرم عبد المسيح", "amount": 6000, "note": null}, {"m": 13, "name": "رامي موسي سليمان", "amount": 8000, "note": null}, {"m": 14, "name": "سامية شاكر (علاج)", "amount": 10000, "note": null}], "computedTotal": 96000, "computedCount": 14}, {"id": 13, "name": "الفشن", "officialCases": 29, "officialAmount": 35000, "committee": "الأخ عادل ذكري حنا", "people": [{"m": 1, "name": "نادية ناشد مرقس", "amount": 750, "note": null}, {"m": 2, "name": "كريم نصر الله عزيز", "amount": 750, "note": null}, {"m": 3, "name": "تريزا عيد اسحق", "amount": 750, "note": null}, {"m": 4, "name": "حنان ثابت عزيز", "amount": 750, "note": null}, {"m": 5, "name": "وفاء حنا هارون", "amount": 750, "note": null}, {"m": 6, "name": "فايزة عزيز إبراهيم", "amount": 750, "note": null}, {"m": 7, "name": "نادين رضا شحاته", "amount": 750, "note": null}, {"m": 8, "name": "امال سليمان بنيامين", "amount": 750, "note": null}, {"m": 9, "name": "ايمان سعد اسعد", "amount": 750, "note": null}, {"m": 10, "name": "نوال تعلب رزق", "amount": 750, "note": null}, {"m": 11, "name": "حنان صابر رشدي", "amount": 750, "note": null}, {"m": 12, "name": "فوزية سليمان", "amount": 750, "note": null}, {"m": 13, "name": "فردوس عزيز برسوم", "amount": 2000, "note": null}, {"m": 14, "name": "باسم جمال", "amount": 2000, "note": null}, {"m": 15, "name": "مرفت كمال", "amount": 2000, "note": null}, {"m": 16, "name": "بولس رشدي إسكندر", "amount": 2000, "note": null}, {"m": 17, "name": "اميرة إيليا بخيت", "amount": 3000, "note": null}, {"m": 18, "name": "مجيدة وهيب عبيد", "amount": 2000, "note": null}, {"m": 19, "name": "نسرين صموئيل بخيت", "amount": 2000, "note": null}, {"m": 20, "name": "سماح توفيق شاكر", "amount": 1500, "note": null}, {"m": 21, "name": "حكمة ثابت عبد الله", "amount": 1500, "note": null}, {"m": 22, "name": "فايزة شحاته يونان", "amount": 750, "note": null}, {"m": 23, "name": "مارينا زاهي مقار", "amount": 2000, "note": null}, {"m": 24, "name": "ست سمر", "amount": 750, "note": null}, {"m": 25, "name": "جميلة مجدي", "amount": 750, "note": null}, {"m": 26, "name": "صباح جرجس", "amount": 750, "note": null}, {"m": 27, "name": "سحر زغلول", "amount": 1500, "note": null}, {"m": 28, "name": "نعمة صبحي", "amount": 750, "note": null}, {"m": 29, "name": "نرجس أنور", "amount": 750, "note": null}], "computedTotal": 35000, "computedCount": 29}, {"id": 14, "name": "سدس", "officialCases": 13, "officialAmount": 19500, "committee": "غالي صدقي - منير عزيز", "people": [{"m": 1, "name": "قمر عبد المسيح عبده", "amount": 1500, "note": null}, {"m": 2, "name": "مجيدة جرجس سعد", "amount": 1500, "note": null}, {"m": 3, "name": "اماني فخري عزيز", "amount": 1500, "note": null}, {"m": 4, "name": "جميلة فرح معوض", "amount": 1500, "note": null}, {"m": 5, "name": "سنية فانوس سعد", "amount": 1500, "note": null}, {"m": 6, "name": "بهية إبراهيم حنا", "amount": 1500, "note": null}, {"m": 7, "name": "سامي إبراهيم حنا", "amount": 1500, "note": null}, {"m": 8, "name": "ايمن ثابت إبراهيم", "amount": 1500, "note": null}, {"m": 9, "name": "سعاد عزيز عبده", "amount": 1500, "note": null}, {"m": 10, "name": "مينا فخري منير", "amount": 1500, "note": null}, {"m": 11, "name": "اشرف سامي فاضل", "amount": 1500, "note": null}, {"m": 12, "name": "انجي فخري عزيز", "amount": 1500, "note": null}, {"m": 13, "name": "سونة صبحي اسعد", "amount": 1500, "note": null}], "computedTotal": 19500, "computedCount": 13}, {"id": 15, "name": "خليل واصف", "officialCases": 43, "officialAmount": 71300, "committee": "مايز عياد - عبد الله بولس", "people": [{"m": 1, "name": "حكمة وهبة", "amount": 2000, "note": null}, {"m": 2, "name": "نادية وهبة", "amount": 1200, "note": null}, {"m": 3, "name": "لبيبة عطا الله", "amount": 1200, "note": null}, {"m": 4, "name": "سعدية صادق", "amount": 1200, "note": null}, {"m": 5, "name": "محاسن حبيب", "amount": 2000, "note": null}, {"m": 6, "name": "سوسو فاروق", "amount": 1200, "note": null}, {"m": 7, "name": "مريم حكيم", "amount": 1500, "note": null}, {"m": 8, "name": "قدسية أيوب", "amount": 2500, "note": null}, {"m": 9, "name": "عفيفة رشدي", "amount": 1200, "note": null}, {"m": 10, "name": "زكية إبراهيم", "amount": 1200, "note": null}, {"m": 11, "name": "فرحة واصف", "amount": 1200, "note": null}, {"m": 12, "name": "عفاف عدلي", "amount": 2500, "note": null}, {"m": 13, "name": "وديع فهيم", "amount": 2500, "note": null}, {"m": 14, "name": "رومترا عزمي", "amount": 2500, "note": null}, {"m": 15, "name": "مريم عياد", "amount": 1200, "note": null}, {"m": 16, "name": "كامليا شاكر", "amount": 1200, "note": null}, {"m": 17, "name": "مريم عبد الشهيد", "amount": 1200, "note": null}, {"m": 18, "name": "امجد وديع", "amount": 1500, "note": null}, {"m": 19, "name": "هاني ملاك", "amount": 2000, "note": null}, {"m": 20, "name": "عفاف سمير", "amount": 1500, "note": null}, {"m": 21, "name": "كامل عياد", "amount": 2500, "note": null}, {"m": 22, "name": "غطاس منير", "amount": 2500, "note": null}, {"m": 23, "name": "تريفينا مجدي", "amount": 1200, "note": null}, {"m": 24, "name": "امل ملاك", "amount": 1200, "note": null}, {"m": 25, "name": "رضا عياد", "amount": 3000, "note": null}, {"m": 26, "name": "نورا منير", "amount": 1000, "note": null}, {"m": 27, "name": "سمكة فايق", "amount": 1000, "note": null}, {"m": 28, "name": "فضل فهيم", "amount": 2500, "note": null}, {"m": 29, "name": "صبحي منير", "amount": 1000, "note": null}, {"m": 30, "name": "نزيه سعيد", "amount": 1000, "note": null}, {"m": 31, "name": "سعد وديع", "amount": 1200, "note": null}, {"m": 32, "name": "سعاد عياد", "amount": 1200, "note": null}, {"m": 33, "name": "مريم محروس", "amount": 2500, "note": null}, {"m": 34, "name": "مريم شحاته", "amount": 2000, "note": null}, {"m": 35, "name": "اميرة شحاته", "amount": 2000, "note": null}, {"m": 36, "name": "هاني وديع", "amount": 1200, "note": null}, {"m": 37, "name": "سعد جميل", "amount": 2000, "note": null}, {"m": 38, "name": "سامية موريس", "amount": 3000, "note": "اجتماع قمبش"}, {"m": 39, "name": "عياد توفيق", "amount": 1200, "note": null}, {"m": 40, "name": "صبري ملاك", "amount": 1200, "note": null}, {"m": 41, "name": "سعدية رشدي", "amount": 1200, "note": null}, {"m": 42, "name": "كمليا فهمي", "amount": 1200, "note": null}, {"m": 43, "name": "لوزا عايد", "amount": 2000, "note": null}], "computedTotal": 71300, "computedCount": 43}, {"id": 16, "name": "الفنت", "officialCases": 28, "officialAmount": 32500, "committee": "بيتر سمير", "people": [{"m": 1, "name": "سامي فؤاد غالي", "amount": 750, "note": null}, {"m": 2, "name": "ممدوح فؤاد", "amount": 3000, "note": null}, {"m": 3, "name": "نادي توفيق ذكي", "amount": 750, "note": null}, {"m": 4, "name": "اميرة سامي فوزي", "amount": 750, "note": null}, {"m": 5, "name": "جرجس راغب", "amount": 750, "note": null}, {"m": 6, "name": "بشري صادق بسخرون", "amount": 750, "note": null}, {"m": 7, "name": "سناء فؤاد فتحي", "amount": 1250, "note": null}, {"m": 8, "name": "عيسي رمزي", "amount": 750, "note": null}, {"m": 9, "name": "مجدي حنا صليب", "amount": 750, "note": null}, {"m": 10, "name": "سهير حبيب شفيق", "amount": 750, "note": null}, {"m": 11, "name": "عايدة بطرس اخنوخ", "amount": 750, "note": null}, {"m": 12, "name": "امل معوض بولس", "amount": 2000, "note": null}, {"m": 13, "name": "كريمة فوزي شاكر", "amount": 750, "note": null}, {"m": 14, "name": "مارينا جميل", "amount": 750, "note": null}, {"m": 15, "name": "نبيلة فؤاد يوسف", "amount": 750, "note": null}, {"m": 16, "name": "مرفت سمير فهمي", "amount": 750, "note": null}, {"m": 17, "name": "سعد موسي", "amount": 750, "note": null}, {"m": 18, "name": "جملات حنا", "amount": 750, "note": null}, {"m": 19, "name": "اسحق فؤاد يوسف", "amount": 750, "note": null}, {"m": 20, "name": "رضا متي امين", "amount": 750, "note": null}, {"m": 21, "name": "فايزة توفيق", "amount": 750, "note": null}, {"m": 22, "name": "نادية كامل تادرس", "amount": 750, "note": null}, {"m": 23, "name": "متي بباوي ميخائيل", "amount": 750, "note": null}, {"m": 24, "name": "ملاك حنا صليب", "amount": 750, "note": null}, {"m": 25, "name": "مريم فرح حنا", "amount": 750, "note": null}, {"m": 26, "name": "نعناعة توفيق هارون", "amount": 750, "note": null}, {"m": 27, "name": "سنية عزيز", "amount": 750, "note": null}, {"m": 28, "name": "سامية جرجي", "amount": 750, "note": null}], "computedTotal": 25000, "computedCount": 28}, {"id": 17, "name": "كفر درويش", "officialCases": 10, "officialAmount": 60000, "committee": "عزمي اسحق", "people": [{"m": 1, "name": "حنان عبد المسيح حنا", "amount": 10000, "note": null}, {"m": 2, "name": "فايز حبيب ونيس", "amount": 6000, "note": null}, {"m": 3, "name": "عطية فايز حبيب", "amount": 7000, "note": null}, {"m": 4, "name": "حكيمة رزق الله جرجس", "amount": 6000, "note": null}, {"m": 5, "name": "فادية راغب عبد السيد", "amount": 6000, "note": null}, {"m": 6, "name": "نادية جمال عبد السيد", "amount": 6000, "note": null}, {"m": 7, "name": "عايدة فايز", "amount": 6000, "note": null}, {"m": 8, "name": "غالية عيد صادق", "amount": 7000, "note": null}, {"m": 9, "name": "مريم صليب", "amount": 3000, "note": null}, {"m": 10, "name": "هايدي ميلاد", "amount": 3000, "note": null}], "computedTotal": 60000, "computedCount": 10}], "grand": {"totalMeetings": 17, "totalCasesOfficial": 458, "totalAmountOfficial": 1233000, "individualAid": 164600, "grandTotal": 1376600}}</script>
+<script id="app-data" type="application/json">{"years": {"2026": {"label": "عام 2026", "individualAid": 164600, "meetings": [{"id": 1, "name": "اجتماع مغاغة", "officialCases": 12, "officialAmount": 100000, "committee": "جميل مختار - لطفي يونان", "people": [{"m": 1, "name": "عطا شنودة", "amount": 8000, "note": null}, {"m": 2, "name": "رفعت إبراهيم", "amount": 12000, "note": null}, {"m": 3, "name": "هاني فايز شاكر", "amount": 4000, "note": null}, {"m": 4, "name": "ماجد صفوت", "amount": 5000, "note": null}, {"m": 5, "name": "نادية عطية", "amount": 7000, "note": null}, {"m": 6, "name": "فايزة لبيب", "amount": 4000, "note": null}, {"m": 7, "name": "ام رأفت يوسف فايز", "amount": 8000, "note": null}, {"m": 8, "name": "نسرين رسمي", "amount": 8000, "note": null}, {"m": 9, "name": "وهيبة ساويرس", "amount": 8000, "note": null}, {"m": 10, "name": "فادية اسحق عبد المسيح", "amount": 6000, "note": null}, {"m": 11, "name": "نادية ارملة مدحت متياس", "amount": 6000, "note": null}, {"m": 11, "name": "هناء ارملة وفيق البدري", "amount": 5000, "note": null}, {"m": 12, "name": "سلوي رفعت إبراهيم", "amount": 10000, "note": null}, {"m": 13, "name": "مريم ميخائيل إبراهيم", "amount": 5000, "note": null}, {"m": null, "name": "طوارئ", "amount": 4000, "note": null}], "computedTotal": 100000, "computedCount": 15}, {"id": 2, "name": "اجتماع بني مزار", "officialCases": 15, "officialAmount": 106000, "committee": "يعقوب جاد - حنا اسحق", "people": [{"m": 1, "name": "ارملة المرحوم كامل حنا", "amount": 6000, "note": null}, {"m": 2, "name": "الأخ عاطف جرجس", "amount": 15000, "note": null}, {"m": 3, "name": "سليمان رشدي", "amount": 6000, "note": null}, {"m": 4, "name": "ايمان فوزي", "amount": 6000, "note": null}, {"m": 5, "name": "ام مينا سمير", "amount": 6000, "note": null}, {"m": 6, "name": "ام بيشوي ناصر", "amount": 6000, "note": null}, {"m": 7, "name": "نبيل  ميخائيل", "amount": 10000, "note": null}, {"m": 8, "name": "رحمة حنين", "amount": 8000, "note": null}, {"m": 9, "name": "سامية ملاك", "amount": 6000, "note": null}, {"m": 10, "name": "عفة عبد المسيح", "amount": 8000, "note": null}, {"m": 11, "name": "عازر شفيق", "amount": 8000, "note": null}, {"m": 12, "name": "كمال كامل", "amount": 5000, "note": null}, {"m": 13, "name": "كمال خليل ( زواج ابنته)", "amount": 8000, "note": null}, {"m": 14, "name": "ام يوسف", "amount": 2000, "note": null}, {"m": 15, "name": "اسرة المرحوم ايمن رزق", "amount": 6000, "note": null}], "computedTotal": 106000, "computedCount": 15}, {"id": 3, "name": "اجتماع الشيخ زياد", "officialCases": 29, "officialAmount": 118000, "committee": "هاني مختار - نبيل خليل", "people": [{"m": 1, "name": "فايق صدقي رزق", "amount": 6000, "note": null}, {"m": 2, "name": "مريم نصر برسوم", "amount": 3000, "note": null}, {"m": 3, "name": "نعمة فؤاد نصيف", "amount": 5000, "note": null}, {"m": 4, "name": "نادية نجيب إبراهيم", "amount": 5000, "note": null}, {"m": 5, "name": "سوسو منير فهمي مسعد", "amount": 4000, "note": null}, {"m": 6, "name": "نور عياد حنا", "amount": 4000, "note": null}, {"m": 7, "name": "عيد يوسف جرجس", "amount": 2000, "note": null}, {"m": 8, "name": "نعمة صالح حبيب", "amount": 2500, "note": null}, {"m": 9, "name": "عايدة ثابت يونان", "amount": 4000, "note": null}, {"m": 10, "name": "هالة عماد ساوريس خليل", "amount": 3500, "note": null}, {"m": 11, "name": "عطا الله وديع عطا الله", "amount": 8000, "note": null}, {"m": 12, "name": "برسوم فؤاد برسوم", "amount": 4000, "note": null}, {"m": 13, "name": "فتحية منير فهمي", "amount": 2000, "note": null}, {"m": 14, "name": "سامح عطا الله وديع", "amount": 1500, "note": null}, {"m": 15, "name": "سنية وديع عطا الله", "amount": 2000, "note": null}, {"m": 16, "name": "عيد بولس خليل", "amount": 6000, "note": null}, {"m": 17, "name": "زوزة عزيز فانوس", "amount": 2000, "note": null}, {"m": 18, "name": "سهير نور عياد حنا", "amount": 4000, "note": null}, {"m": 19, "name": "سارة فهمي ابراهيم", "amount": 6000, "note": null}, {"m": 20, "name": "يوسف عاشور اسعد", "amount": 5000, "note": null}, {"m": 21, "name": "متي سعد صادق", "amount": 4000, "note": null}, {"m": 22, "name": "مارتن امير عادل", "amount": 4000, "note": null}, {"m": 23, "name": "زغلول حبيب فهيم", "amount": 2000, "note": null}, {"m": 24, "name": "عماد حنا واصف", "amount": 2000, "note": null}, {"m": 25, "name": "ثابت عادل ثابت", "amount": 2000, "note": null}, {"m": 26, "name": "سميرة نبيل خليل", "amount": 3000, "note": null}, {"m": 27, "name": "فرح فايز يوسف", "amount": 2000, "note": null}, {"m": 28, "name": "جون عادل حنا", "amount": 5000, "note": null}, {"m": 29, "name": "عادل جرجس يوسف", "amount": 3000, "note": null}, {"m": 30, "name": "نادية هاني", "amount": 8000, "note": null}, {"m": null, "name": "طوارئ", "amount": 3500, "note": null}], "computedTotal": 118000, "computedCount": 31}, {"id": 4, "name": "اجتماع سلاقوس", "officialCases": 46, "officialAmount": 115700, "committee": "عماد عطية - أبو باسم", "people": [{"m": 1, "name": "سمير صالح بطرس", "amount": 3200, "note": null}, {"m": 24, "name": "إسكندر محروس عزيز", "amount": 2000, "note": null}, {"m": 2, "name": "فتحي ناروز كامل", "amount": 3000, "note": null}, {"m": 25, "name": "النونة حنا رزق الله", "amount": 2000, "note": null}, {"m": 3, "name": "نادي امين رزق الله", "amount": 3000, "note": null}, {"m": 26, "name": "سامية فايق بطرس", "amount": 3000, "note": null}, {"m": 4, "name": "كيرلس عاطف ثابت", "amount": 2250, "note": null}, {"m": 27, "name": "عدلية جرجس عازر", "amount": 1000, "note": null}, {"m": 5, "name": "أنور وليم  كامل", "amount": 2000, "note": null}, {"m": 28, "name": "سامية فهمي عازر", "amount": 1000, "note": null}, {"m": 6, "name": "كمال  عياد إبراهيم", "amount": 2500, "note": null}, {"m": 29, "name": "سميرة فهمي خليل", "amount": 2000, "note": null}, {"m": 7, "name": "فايز عزيز ايوب", "amount": 7000, "note": null}, {"m": 30, "name": "نادية فهمي حنا", "amount": 1000, "note": null}, {"m": 8, "name": "عايدة عبد المسيح حنا", "amount": 3000, "note": null}, {"m": 31, "name": "فتحية ذكي جرجس", "amount": 1000, "note": null}, {"m": 9, "name": "عبد المسيح أيوب فام", "amount": 2500, "note": null}, {"m": 32, "name": "مريم يوسف متي", "amount": 4000, "note": null}, {"m": 10, "name": "شكري أيوب فام", "amount": 2000, "note": null}, {"m": 33, "name": "هدية فايز شاكر", "amount": 2000, "note": null}, {"m": 11, "name": "عادل ابراهيم شحاتة", "amount": 2500, "note": null}, {"m": 34, "name": "عدلية يوسف غبريال", "amount": 1500, "note": null}, {"m": 12, "name": "ميلاد فايز شاكر", "amount": 12000, "note": null}, {"m": 35, "name": "وديعة فايق بطرس", "amount": 1500, "note": null}, {"m": 13, "name": "رضا امين رزق الله", "amount": 3000, "note": null}, {"m": 36, "name": "منيرة حنا صادق", "amount": 2000, "note": null}, {"m": 14, "name": "محب صفوت كامل", "amount": 5000, "note": null}, {"m": 37, "name": "عايدة شحاته خليل", "amount": 1500, "note": null}, {"m": 15, "name": "نادي عياد عبد المسيح", "amount": 7000, "note": null}, {"m": 38, "name": "فوزية كامل يوسف", "amount": 2000, "note": null}, {"m": 16, "name": "نصحي ثابت حليم", "amount": 1250, "note": null}, {"m": 39, "name": "نعمة عزيز أيوب", "amount": 3000, "note": null}, {"m": 17, "name": "مجدي لويس حليم", "amount": 2000, "note": null}, {"m": 40, "name": "عادل عطية وليم", "amount": 1000, "note": null}, {"m": 18, "name": "حنان فايق بطرس", "amount": 1500, "note": null}, {"m": 41, "name": "سوزان يسي اسحق", "amount": 2000, "note": null}, {"m": 19, "name": "نورة وليم كامل", "amount": 1000, "note": null}, {"m": 42, "name": "فاروق يوسف إبراهيم", "amount": 2000, "note": null}, {"m": 20, "name": "صباح ثابت رزق الله", "amount": 2500, "note": null}, {"m": 43, "name": "شاكر عدلي شاكر", "amount": 1000, "note": null}, {"m": 21, "name": "سميرة رياض حنا", "amount": 1500, "note": null}, {"m": 44, "name": "نجاح سمير فرج", "amount": 1500, "note": null}, {"m": 22, "name": "سميرة شحاته حنا", "amount": 1500, "note": null}, {"m": 45, "name": "نبيل شكري ايوب", "amount": 2000, "note": null}, {"m": 23, "name": "حنان مايز بطرس", "amount": 2500, "note": null}, {"m": 46, "name": "فليب عيد كمال", "amount": 2000, "note": null}], "computedTotal": 115700, "computedCount": 46}, {"id": 5, "name": "عزبة بطرس", "officialCases": 32, "officialAmount": 75000, "committee": "ناثان عطية - نمر رشدي", "people": [{"m": 1, "name": "مجدي بطرس عبد الشهيد", "amount": 2500, "note": null}, {"m": 2, "name": "سناء شفيق عبد النور", "amount": 2000, "note": null}, {"m": 3, "name": "نشوي عيد عطية", "amount": 3000, "note": null}, {"m": 4, "name": "فايزة إبراهيم متي", "amount": 3000, "note": null}, {"m": 5, "name": "كيريا خليل عطية", "amount": 2500, "note": null}, {"m": 6, "name": "شارود حنا فهيم", "amount": 2500, "note": null}, {"m": 7, "name": "ماجد فرج الله جيد", "amount": 2500, "note": null}, {"m": 8, "name": "صباح عطية مرزوق", "amount": 2000, "note": null}, {"m": 9, "name": "اليصابات عوض عبد الشهيد", "amount": 2500, "note": null}, {"m": 10, "name": "اعتدال لمعي ناشد", "amount": 1500, "note": null}, {"m": 11, "name": "منيرة اخنوخ كامل", "amount": 2000, "note": null}, {"m": 12, "name": "مكاسب ميخائيل دانيال", "amount": 2500, "note": null}, {"m": 13, "name": "محب رمزي شاكر", "amount": 2000, "note": null}, {"m": 14, "name": "رضا اسحق متي", "amount": 2000, "note": null}, {"m": 15, "name": "اشرف صموئيل فاروق", "amount": 2500, "note": null}, {"m": 16, "name": "عطا الله فاروق حبيب", "amount": 2500, "note": null}, {"m": 17, "name": "سعدية اديب كامل", "amount": 2500, "note": null}, {"m": 18, "name": "عاطف كامل برسوم", "amount": 1500, "note": null}, {"m": 19, "name": "فارس اسحق متي", "amount": 2500, "note": null}, {"m": 20, "name": "فايز إبراهيم متي", "amount": 2000, "note": null}, {"m": 21, "name": "عفاف رمزي شاكر", "amount": 2000, "note": null}, {"m": 22, "name": "موسي السيد موسي", "amount": 2000, "note": null}, {"m": 23, "name": "عيد وليم حنا", "amount": 2500, "note": null}, {"m": 24, "name": "نشأت ميخائيل حنا", "amount": 2500, "note": null}, {"m": 25, "name": "عزت هور إبراهيم", "amount": 2500, "note": null}, {"m": 26, "name": "عايدة السيد حنا", "amount": 2000, "note": null}, {"m": 27, "name": "فايقة شفيق عبد النور", "amount": 2000, "note": null}, {"m": 28, "name": "كرستين لطف رزق الله", "amount": 2500, "note": null}, {"m": 29, "name": "نرمين عطية خليل", "amount": 2000, "note": null}, {"m": 30, "name": "صبحي السيد حنا", "amount": 2000, "note": null}, {"m": 31, "name": "يونان السيد حنا", "amount": 2000, "note": null}, {"m": 32, "name": "ناثان عطية ( دروس لابنه)", "amount": 5000, "note": null}], "computedTotal": 75000, "computedCount": 32}, {"id": 6, "name": "اشنين النصاري", "officialCases": 29, "officialAmount": 70000, "committee": "مينا جمال - جرجس", "people": [{"m": 1, "name": "يوسف مسعود السيد", "amount": 3000, "note": null}, {"m": 2, "name": "سعيدة هنري ميخائيل", "amount": 1500, "note": null}, {"m": 3, "name": "ملاك حنا تاوضروس", "amount": 1500, "note": null}, {"m": 4, "name": "فرحة فوزي سلامة", "amount": 2000, "note": null}, {"m": 5, "name": "منال لويز نجيب", "amount": 3000, "note": null}, {"m": 6, "name": "اماليا استفانوس خليل", "amount": 3000, "note": null}, {"m": 7, "name": "نادية حنين ميخائيل", "amount": 2000, "note": null}, {"m": 8, "name": "جمالات وجيه حلمي", "amount": 2000, "note": null}, {"m": 9, "name": "ميرفت سيد ثابت", "amount": 3000, "note": null}, {"m": 10, "name": "صلاح عبد الملاك حنا", "amount": 3000, "note": null}, {"m": 11, "name": "ماجدة رضا نجيب", "amount": 2000, "note": null}, {"m": 12, "name": "جميلة فايز عبده", "amount": 2000, "note": null}, {"m": 13, "name": "نادية حنا يوسف", "amount": 1500, "note": null}, {"m": 14, "name": "سامية إبراهيم شحاته", "amount": 1500, "note": null}, {"m": 15, "name": "ثريا اسحق مليكة", "amount": 1500, "note": null}, {"m": 16, "name": "عايدة حنا", "amount": 1500, "note": null}, {"m": 17, "name": "ايزيس هواش السيد", "amount": 1500, "note": null}, {"m": 18, "name": "نعمة عادل حنا", "amount": 3000, "note": null}, {"m": 19, "name": "عيدة حبيب رزق", "amount": 2500, "note": null}, {"m": 20, "name": "جيهان نجيب كامل", "amount": 2500, "note": null}, {"m": 21, "name": "نادية السيد حنا", "amount": 2500, "note": null}, {"m": 22, "name": "عبير عادل رزق", "amount": 2500, "note": null}, {"m": 23, "name": "مريم سعيد كامل", "amount": 2000, "note": null}, {"m": 24, "name": "كريستين جيد نعيم", "amount": 3000, "note": null}, {"m": 25, "name": "هناء إبراهيم شحاته", "amount": 2000, "note": null}, {"m": 26, "name": "امال سمير يوسف", "amount": 2000, "note": null}, {"m": 27, "name": "رضا ميخائيل بشارة", "amount": 3000, "note": null}, {"m": 28, "name": "مريم داود زاخر", "amount": 2000, "note": null}, {"m": 29, "name": "سمير حلمي ثابت", "amount": 2500, "note": null}, {"m": 30, "name": "طوارئ", "amount": 5000, "note": null}], "computedTotal": 70000, "computedCount": 30}, {"id": 7, "name": "اجتماع حبيب لطف الله", "officialCases": 34, "officialAmount": 61000, "committee": "حنا حبيب - رؤوف فرج الله", "people": [{"m": 1, "name": "اسحق عياد اسحق", "amount": 1200, "note": null}, {"m": 2, "name": "برسيس حنا الله", "amount": 1200, "note": null}, {"m": 3, "name": "شكرية صدقي لبيب", "amount": 1200, "note": null}, {"m": 4, "name": "نادية شحاته", "amount": 1200, "note": null}, {"m": 5, "name": "غطاس نبيل يوسف", "amount": 1200, "note": null}, {"m": 6, "name": "هدية بشري صالح", "amount": 1200, "note": null}, {"m": 7, "name": "جورج يوسف", "amount": 1500, "note": null}, {"m": 8, "name": "حنان موسي", "amount": 1500, "note": null}, {"m": 9, "name": "تهاني رشدي", "amount": 1500, "note": null}, {"m": 10, "name": "وهيب يوسف", "amount": 1000, "note": null}, {"m": 11, "name": "مريم محروس", "amount": 1500, "note": null}, {"m": 12, "name": "سنة شحاته", "amount": 1000, "note": null}, {"m": 13, "name": "منيرة فرج الله", "amount": 1200, "note": null}, {"m": 14, "name": "عفاف حنا الله", "amount": 1200, "note": null}, {"m": 15, "name": "حنا فريج صادق", "amount": 1200, "note": null}, {"m": 16, "name": "مريم مجدي", "amount": 1500, "note": null}, {"m": 17, "name": "سارة صالح", "amount": 1500, "note": null}, {"m": 18, "name": "عفاف قدسي", "amount": 1500, "note": null}, {"m": 19, "name": "فيبي سمير", "amount": 1500, "note": null}, {"m": 20, "name": "ميلاد إبراهيم", "amount": 1500, "note": null}, {"m": 21, "name": "غالية حنا الله", "amount": 1500, "note": null}, {"m": 22, "name": "نورة شفيق بباوي", "amount": 1000, "note": null}, {"m": 23, "name": "فخري حنا الله", "amount": 5000, "note": null}, {"m": 24, "name": "جاكلين فخري", "amount": 1000, "note": null}, {"m": 25, "name": "تريزة فريز", "amount": 2500, "note": null}, {"m": 26, "name": "عايدة شحاته حنا", "amount": 1500, "note": null}, {"m": 27, "name": "دامرس جورج", "amount": 1500, "note": null}, {"m": 28, "name": "مسعودة حلمي", "amount": 1500, "note": null}, {"m": 29, "name": "هناء شكري", "amount": 3000, "note": null}, {"m": 30, "name": "امير جورج", "amount": 1500, "note": null}, {"m": 31, "name": "حنونة شكر الله", "amount": 1500, "note": null}, {"m": 32, "name": "سلوى مكرم", "amount": 1500, "note": null}, {"m": 33, "name": "نادية بباوي فلتس", "amount": 1500, "note": null}, {"m": 34, "name": "زكريا فرج الله", "amount": 1500, "note": null}, {"m": 35, "name": "طوارئ", "amount": 3700, "note": null}, {"m": 36, "name": "أبو ديفيد خضار", "amount": 5000, "note": null}], "computedTotal": 61000, "computedCount": 36}, {"id": 8, "name": "اجتماع الزاوية", "officialCases": 25, "officialAmount": 80000, "committee": "مجدي مكرم - مجدي نصحي", "people": [{"m": 1, "name": "نجاة ناشد بشارة", "amount": 3000, "note": null}, {"m": 2, "name": "حنان ذكي خليل", "amount": 3000, "note": null}, {"m": 3, "name": "عدلية مكرم ذكي", "amount": 3000, "note": null}, {"m": 4, "name": "مينا عيد امين", "amount": 3000, "note": null}, {"m": 5, "name": "جميلات لبيب شحاته", "amount": 3000, "note": null}, {"m": 6, "name": "مرسا حلمي دانيال", "amount": 3000, "note": null}, {"m": 7, "name": "ماريان فرح", "amount": 3000, "note": null}, {"m": 8, "name": "فيفي وجيه امين", "amount": 3000, "note": null}, {"m": 9, "name": "صباح رضا ابراهيم", "amount": 3000, "note": null}, {"m": 10, "name": "نبيلة عماد مجدي", "amount": 3000, "note": null}, {"m": 11, "name": "عياد ذكي عياد", "amount": 3000, "note": null}, {"m": 12, "name": "ميرفت عاطف نجيب", "amount": 3000, "note": null}, {"m": 13, "name": "ناجي حنين حنا", "amount": 3000, "note": null}, {"m": 14, "name": "نادية حنين حنا", "amount": 3000, "note": null}, {"m": 15, "name": "شحاته اسعد حنين", "amount": 3000, "note": null}, {"m": 16, "name": "وليد وهيب ذكي", "amount": 3000, "note": null}, {"m": 17, "name": "شوقي وجيه امين", "amount": 3000, "note": null}, {"m": 18, "name": "أسرة سامح سيد فهمي", "amount": 3000, "note": null}, {"m": 19, "name": "منصور وهيب ذكي", "amount": 3000, "note": null}, {"m": 20, "name": "عاطف اسحق ذكي", "amount": 3000, "note": null}, {"m": 21, "name": "فايق ذكي خليل", "amount": 3000, "note": null}, {"m": 22, "name": "ايمن ماهر فهمي", "amount": 3000, "note": null}, {"m": 23, "name": "زوجة وديع جميل", "amount": 3000, "note": null}, {"m": 24, "name": "رضا إبراهيم", "amount": 3000, "note": null}, {"m": 25, "name": "مينا رضا", "amount": 3000, "note": null}, {"m": 25, "name": "طوارئ", "amount": 5000, "note": null}], "computedTotal": 80000, "computedCount": 26}, {"id": 9, "name": "اجتماع إبراهيم عبد السيد", "officialCases": 56, "officialAmount": 79500, "committee": "إبراهيم عزيز - رضا فايز", "people": [{"m": 1, "name": "دولت فهمي اسحق", "amount": 1500, "note": null}, {"m": 2, "name": "مريم فرج وهبة", "amount": 2500, "note": null}, {"m": 3, "name": "كاميليا صادق كامل", "amount": 1500, "note": null}, {"m": 4, "name": "نعمات نجيب باراباس", "amount": 2000, "note": null}, {"m": 5, "name": "شحاته عطية عبد الملاك", "amount": 2000, "note": null}, {"m": 6, "name": "إبراهيم عزيز نجيب", "amount": 3000, "note": null}, {"m": 7, "name": "عادل صموئيل حليم", "amount": 3000, "note": null}, {"m": 8, "name": "بطرس تيموثاوس حليم", "amount": 2500, "note": null}, {"m": 9, "name": "مرثا حنا عزيز", "amount": 2000, "note": null}, {"m": 10, "name": "فايز ابراهيم جرجس", "amount": 1500, "note": null}, {"m": 11, "name": "مكرم ذكي اسعد", "amount": 2000, "note": null}, {"m": 12, "name": "نعمة عاطف شفيق", "amount": 500, "note": null}, {"m": 13, "name": "فايزة صادق  كامل", "amount": 1500, "note": null}, {"m": 14, "name": "عواطف عزمي حنا", "amount": 1000, "note": null}, {"m": 15, "name": "فرحة شحات عطية", "amount": 1000, "note": null}, {"m": 16, "name": "عايشة حليم مقار", "amount": 1000, "note": null}, {"m": 17, "name": "صباحية عزمي امين", "amount": 500, "note": null}, {"m": 18, "name": "ملاك عطية عبد الملاك", "amount": 2000, "note": null}, {"m": 19, "name": "ملاك صادق جرجس", "amount": 1500, "note": null}, {"m": 20, "name": "سامية سيد باراباس", "amount": 800, "note": null}, {"m": 21, "name": "وديع فتحي ذكى", "amount": 500, "note": null}, {"m": 22, "name": "فرحة توفيق ام مجدى فهمى", "amount": 1000, "note": null}, {"m": 23, "name": "رزق وليم بطرس", "amount": 1000, "note": null}, {"m": 24, "name": "غالية صادق جرجس", "amount": 1200, "note": null}, {"m": 25, "name": "فريزة شحاته", "amount": 500, "note": null}, {"m": 26, "name": "فرج كامل  سيحة", "amount": 2000, "note": null}, {"m": 27, "name": "سعدة حبيب", "amount": 800, "note": null}, {"m": 28, "name": "رشا جرجس", "amount": 1000, "note": null}, {"m": 29, "name": "عزمي امين عوض", "amount": 2000, "note": null}, {"m": 30, "name": "فوزية باراباس", "amount": 1000, "note": null}, {"m": 31, "name": "بلسيم فخري حنين", "amount": 1000, "note": null}, {"m": 32, "name": "عطيات اسعد  حنين", "amount": 800, "note": null}, {"m": 33, "name": "ناجي فهمي عبد الملاك", "amount": 500, "note": null}, {"m": 34, "name": "عطيات ابراهيم بباوي", "amount": 1000, "note": null}, {"m": 35, "name": "شحاته امين ابراهيم", "amount": 1500, "note": null}, {"m": 36, "name": "فوزية صادق عبد الملاك", "amount": 1000, "note": null}, {"m": 37, "name": "جرجس غالي جرجس", "amount": 1000, "note": null}, {"m": 38, "name": "أشرف شحاته صموئيل", "amount": 1200, "note": null}, {"m": 39, "name": "ارملة مصلح عطية", "amount": 1500, "note": null}, {"m": 40, "name": "عزيز نجيب سيحة", "amount": 1500, "note": null}, {"m": 41, "name": "عايدة شحاته", "amount": 800, "note": null}, {"m": 42, "name": "حنان شحاته عبد الملاك", "amount": 1500, "note": null}, {"m": 43, "name": "جوهرة زوجة محروس", "amount": 800, "note": null}, {"m": 44, "name": "زوجة مفيد سعيد", "amount": 800, "note": null}, {"m": 45, "name": "زوجة عيد لمعي", "amount": 500, "note": null}, {"m": 46, "name": "امير ناجي كامل", "amount": 1500, "note": null}, {"m": 47, "name": "زوجة رفعت نجيب", "amount": 500, "note": null}, {"m": 48, "name": "نوره ملاك", "amount": 1000, "note": null}, {"m": 49, "name": "زوجة وليد يعقوب", "amount": 800, "note": null}, {"m": 50, "name": "مريم اسعد", "amount": 500, "note": null}, {"m": 51, "name": "زوجة ابانوب ميلاد", "amount": 500, "note": null}, {"m": 52, "name": "مريم حنا", "amount": 500, "note": null}, {"m": 53, "name": "نوره سامي ذكي", "amount": 2500, "note": null}, {"m": 54, "name": "سامية فخري", "amount": 2500, "note": null}, {"m": 55, "name": "نادية صادق", "amount": 500, "note": null}, {"m": 56, "name": "بنت الأخ إبراهيم درس", "amount": 4000, "note": null}, {"m": 57, "name": "طوارئ", "amount": 5000, "note": null}], "computedTotal": 79500, "computedCount": 57}, {"id": 10, "name": "اجتماع جزيرة شارونة", "officialCases": 24, "officialAmount": 71500, "committee": "سلطان سعد - ارنست عطية", "people": [{"m": 1, "name": "فالح إسكندر معوض", "amount": 1000, "note": null}, {"m": 2, "name": "اليشع حنا يوسف", "amount": 2000, "note": null}, {"m": 3, "name": "اماني حمدي استفانوس", "amount": 1500, "note": null}, {"m": 4, "name": "امال مايز جرجس", "amount": 3000, "note": null}, {"m": 5, "name": "نبيلة عادل فريد", "amount": 1500, "note": null}, {"m": 6, "name": "مريم وهبة عبيد", "amount": 2500, "note": null}, {"m": 7, "name": "فرح إبراهيم يوسف", "amount": 8000, "note": null}, {"m": 8, "name": "اماني صبحي ناشد", "amount": 1500, "note": null}, {"m": 9, "name": "ايلين ابراهيم معوض", "amount": 3000, "note": null}, {"m": 10, "name": "فرحة عوض جرجس", "amount": 2000, "note": null}, {"m": 11, "name": "شهدي رجائي فكري", "amount": 3000, "note": null}, {"m": 12, "name": "إبراهيم فريد مرقس", "amount": 2500, "note": null}, {"m": 13, "name": "عماد إبراهيم معوض", "amount": 4000, "note": null}, {"m": 14, "name": "ماري نصر سعد", "amount": 2000, "note": null}, {"m": 15, "name": "عفيفة نعيم توفيق", "amount": 7000, "note": null}, {"m": 16, "name": "فادية كسبان حبيب", "amount": 3000, "note": null}, {"m": 17, "name": "هبة سبع حنا", "amount": 3000, "note": null}, {"m": 18, "name": "ايمان هاني ذكري", "amount": 1500, "note": null}, {"m": 19, "name": "عادل فريد مرقس", "amount": 1500, "note": null}, {"m": 20, "name": "ام يوثام حنان", "amount": 2500, "note": null}, {"m": 21, "name": "حنان مرقس فريد", "amount": 6000, "note": null}, {"m": 22, "name": "فادية إبراهيم مهني", "amount": 1500, "note": null}, {"m": 23, "name": "نبيل ذكي", "amount": 3000, "note": null}, {"m": 24, "name": "سلطان سعد", "amount": 5000, "note": null}], "computedTotal": 71500, "computedCount": 24}, {"id": 11, "name": "اجتماع شارونة", "officialCases": 19, "officialAmount": 42000, "committee": "يوسف خميس - مختار خميس", "people": [{"m": 1, "name": "عواطف صليب مرقس", "amount": 2000, "note": null}, {"m": 2, "name": "سامي حبيب سوريال", "amount": 2000, "note": null}, {"m": 3, "name": "اوجيني يوسف عطية", "amount": 1500, "note": null}, {"m": 4, "name": "عايدة لبيب عبد الشهيد", "amount": 2000, "note": null}, {"m": 5, "name": "راعوث كامل", "amount": 1500, "note": null}, {"m": 6, "name": "فرحان جرجس عطية", "amount": 2000, "note": null}, {"m": 7, "name": "ماجدة رزق فرج", "amount": 1500, "note": null}, {"m": 8, "name": "مرثا كامل ناشد", "amount": 1500, "note": null}, {"m": 9, "name": "عاطف صليب مرقس", "amount": 2000, "note": null}, {"m": 10, "name": "حنان سعد برسوم", "amount": 2000, "note": null}, {"m": 11, "name": "سعدية يوسف", "amount": 1500, "note": null}, {"m": 12, "name": "اليس ميخائيل", "amount": 1500, "note": null}, {"m": 13, "name": "عاطف فرحان", "amount": 1500, "note": null}, {"m": 14, "name": "سماح عاطف", "amount": 2000, "note": null}, {"m": 15, "name": "مرثا نصحي", "amount": 1500, "note": null}, {"m": 16, "name": "نوال فايز شفيق", "amount": 1000, "note": null}, {"m": 17, "name": "ماجدة رشدي هندي", "amount": 1500, "note": null}, {"m": 18, "name": "هنية لطيف حنا", "amount": 1500, "note": null}, {"m": 19, "name": "نعمة شحاته يعقوب", "amount": 2000, "note": null}, {"m": null, "name": "عملية قلب مفتوح الأخ يوسف", "amount": 10000, "note": null}], "computedTotal": 42000, "computedCount": 20}, {"id": 12, "name": "اجتماع أبو جلبان", "officialCases": 14, "officialAmount": 96000, "committee": "رأفت مكرم - شحاته حنا", "people": [{"m": 1, "name": "ميلاد خميس حنا", "amount": 8000, "note": null}, {"m": 2, "name": "عوض صليب عبد المسيح", "amount": 10000, "note": null}, {"m": 3, "name": "جودة فتحي ذكري", "amount": 8000, "note": null}, {"m": 4, "name": "كريم نجيب حنا", "amount": 8000, "note": null}, {"m": 5, "name": "ماهر عيد شكري", "amount": 8000, "note": null}, {"m": 6, "name": "فوزية زخاري حنا", "amount": 4000, "note": null}, {"m": 7, "name": "نورهان مدحت ميلاد", "amount": 4000, "note": null}, {"m": 8, "name": "سامي ملاك شكري", "amount": 6000, "note": null}, {"m": 9, "name": "صباح فضل الله", "amount": 6000, "note": null}, {"m": 10, "name": "امين صلاح عبد المسيح", "amount": 5000, "note": null}, {"m": 11, "name": "محفوظ عيد اسحق", "amount": 5000, "note": null}, {"m": 12, "name": "رأفت مكرم عبد المسيح", "amount": 6000, "note": null}, {"m": 13, "name": "رامي موسي سليمان", "amount": 8000, "note": null}, {"m": 14, "name": "سامية شاكر (علاج)", "amount": 10000, "note": null}], "computedTotal": 96000, "computedCount": 14}, {"id": 13, "name": "الفشن", "officialCases": 29, "officialAmount": 35000, "committee": "الأخ عادل ذكري حنا", "people": [{"m": 1, "name": "نادية ناشد مرقس", "amount": 750, "note": null}, {"m": 2, "name": "كريم نصر الله عزيز", "amount": 750, "note": null}, {"m": 3, "name": "تريزا عيد اسحق", "amount": 750, "note": null}, {"m": 4, "name": "حنان ثابت عزيز", "amount": 750, "note": null}, {"m": 5, "name": "وفاء حنا هارون", "amount": 750, "note": null}, {"m": 6, "name": "فايزة عزيز إبراهيم", "amount": 750, "note": null}, {"m": 7, "name": "نادين رضا شحاته", "amount": 750, "note": null}, {"m": 8, "name": "امال سليمان بنيامين", "amount": 750, "note": null}, {"m": 9, "name": "ايمان سعد اسعد", "amount": 750, "note": null}, {"m": 10, "name": "نوال تعلب رزق", "amount": 750, "note": null}, {"m": 11, "name": "حنان صابر رشدي", "amount": 750, "note": null}, {"m": 12, "name": "فوزية سليمان", "amount": 750, "note": null}, {"m": 13, "name": "فردوس عزيز برسوم", "amount": 2000, "note": null}, {"m": 14, "name": "باسم جمال", "amount": 2000, "note": null}, {"m": 15, "name": "مرفت كمال", "amount": 2000, "note": null}, {"m": 16, "name": "بولس رشدي إسكندر", "amount": 2000, "note": null}, {"m": 17, "name": "اميرة إيليا بخيت", "amount": 3000, "note": null}, {"m": 18, "name": "مجيدة وهيب عبيد", "amount": 2000, "note": null}, {"m": 19, "name": "نسرين صموئيل بخيت", "amount": 2000, "note": null}, {"m": 20, "name": "سماح توفيق شاكر", "amount": 1500, "note": null}, {"m": 21, "name": "حكمة ثابت عبد الله", "amount": 1500, "note": null}, {"m": 22, "name": "فايزة شحاته يونان", "amount": 750, "note": null}, {"m": 23, "name": "مارينا زاهي مقار", "amount": 2000, "note": null}, {"m": 24, "name": "ست سمر", "amount": 750, "note": null}, {"m": 25, "name": "جميلة مجدي", "amount": 750, "note": null}, {"m": 26, "name": "صباح جرجس", "amount": 750, "note": null}, {"m": 27, "name": "سحر زغلول", "amount": 1500, "note": null}, {"m": 28, "name": "نعمة صبحي", "amount": 750, "note": null}, {"m": 29, "name": "نرجس أنور", "amount": 750, "note": null}], "computedTotal": 35000, "computedCount": 29}, {"id": 14, "name": "سدس", "officialCases": 13, "officialAmount": 19500, "committee": "غالي صدقي - منير عزيز", "people": [{"m": 1, "name": "قمر عبد المسيح عبده", "amount": 1500, "note": null}, {"m": 2, "name": "مجيدة جرجس سعد", "amount": 1500, "note": null}, {"m": 3, "name": "اماني فخري عزيز", "amount": 1500, "note": null}, {"m": 4, "name": "جميلة فرح معوض", "amount": 1500, "note": null}, {"m": 5, "name": "سنية فانوس سعد", "amount": 1500, "note": null}, {"m": 6, "name": "بهية إبراهيم حنا", "amount": 1500, "note": null}, {"m": 7, "name": "سامي إبراهيم حنا", "amount": 1500, "note": null}, {"m": 8, "name": "ايمن ثابت إبراهيم", "amount": 1500, "note": null}, {"m": 9, "name": "سعاد عزيز عبده", "amount": 1500, "note": null}, {"m": 10, "name": "مينا فخري منير", "amount": 1500, "note": null}, {"m": 11, "name": "اشرف سامي فاضل", "amount": 1500, "note": null}, {"m": 12, "name": "انجي فخري عزيز", "amount": 1500, "note": null}, {"m": 13, "name": "سونة صبحي اسعد", "amount": 1500, "note": null}], "computedTotal": 19500, "computedCount": 13}, {"id": 15, "name": "خليل واصف", "officialCases": 43, "officialAmount": 71300, "committee": "مايز عياد - عبد الله بولس", "people": [{"m": 1, "name": "حكمة وهبة", "amount": 2000, "note": null}, {"m": 2, "name": "نادية وهبة", "amount": 1200, "note": null}, {"m": 3, "name": "لبيبة عطا الله", "amount": 1200, "note": null}, {"m": 4, "name": "سعدية صادق", "amount": 1200, "note": null}, {"m": 5, "name": "محاسن حبيب", "amount": 2000, "note": null}, {"m": 6, "name": "سوسو فاروق", "amount": 1200, "note": null}, {"m": 7, "name": "مريم حكيم", "amount": 1500, "note": null}, {"m": 8, "name": "قدسية أيوب", "amount": 2500, "note": null}, {"m": 9, "name": "عفيفة رشدي", "amount": 1200, "note": null}, {"m": 10, "name": "زكية إبراهيم", "amount": 1200, "note": null}, {"m": 11, "name": "فرحة واصف", "amount": 1200, "note": null}, {"m": 12, "name": "عفاف عدلي", "amount": 2500, "note": null}, {"m": 13, "name": "وديع فهيم", "amount": 2500, "note": null}, {"m": 14, "name": "رومترا عزمي", "amount": 2500, "note": null}, {"m": 15, "name": "مريم عياد", "amount": 1200, "note": null}, {"m": 16, "name": "كامليا شاكر", "amount": 1200, "note": null}, {"m": 17, "name": "مريم عبد الشهيد", "amount": 1200, "note": null}, {"m": 18, "name": "امجد وديع", "amount": 1500, "note": null}, {"m": 19, "name": "هاني ملاك", "amount": 2000, "note": null}, {"m": 20, "name": "عفاف سمير", "amount": 1500, "note": null}, {"m": 21, "name": "كامل عياد", "amount": 2500, "note": null}, {"m": 22, "name": "غطاس منير", "amount": 2500, "note": null}, {"m": 23, "name": "تريفينا مجدي", "amount": 1200, "note": null}, {"m": 24, "name": "امل ملاك", "amount": 1200, "note": null}, {"m": 25, "name": "رضا عياد", "amount": 3000, "note": null}, {"m": 26, "name": "نورا منير", "amount": 1000, "note": null}, {"m": 27, "name": "سمكة فايق", "amount": 1000, "note": null}, {"m": 28, "name": "فضل فهيم", "amount": 2500, "note": null}, {"m": 29, "name": "صبحي منير", "amount": 1000, "note": null}, {"m": 30, "name": "نزيه سعيد", "amount": 1000, "note": null}, {"m": 31, "name": "سعد وديع", "amount": 1200, "note": null}, {"m": 32, "name": "سعاد عياد", "amount": 1200, "note": null}, {"m": 33, "name": "مريم محروس", "amount": 2500, "note": null}, {"m": 34, "name": "مريم شحاته", "amount": 2000, "note": null}, {"m": 35, "name": "اميرة شحاته", "amount": 2000, "note": null}, {"m": 36, "name": "هاني وديع", "amount": 1200, "note": null}, {"m": 37, "name": "سعد جميل", "amount": 2000, "note": null}, {"m": 38, "name": "سامية موريس", "amount": 3000, "note": "اجتماع قمبش"}, {"m": 39, "name": "عياد توفيق", "amount": 1200, "note": null}, {"m": 40, "name": "صبري ملاك", "amount": 1200, "note": null}, {"m": 41, "name": "سعدية رشدي", "amount": 1200, "note": null}, {"m": 42, "name": "كمليا فهمي", "amount": 1200, "note": null}, {"m": 43, "name": "لوزا عايد", "amount": 2000, "note": null}], "computedTotal": 71300, "computedCount": 43}, {"id": 16, "name": "الفنت", "officialCases": 28, "officialAmount": 32500, "committee": "بيتر سمير", "people": [{"m": 1, "name": "سامي فؤاد غالي", "amount": 750, "note": null}, {"m": 2, "name": "ممدوح فؤاد", "amount": 3000, "note": null}, {"m": 3, "name": "نادي توفيق ذكي", "amount": 750, "note": null}, {"m": 4, "name": "اميرة سامي فوزي", "amount": 750, "note": null}, {"m": 5, "name": "جرجس راغب", "amount": 750, "note": null}, {"m": 6, "name": "بشري صادق بسخرون", "amount": 750, "note": null}, {"m": 7, "name": "سناء فؤاد فتحي", "amount": 1250, "note": null}, {"m": 8, "name": "عيسي رمزي", "amount": 750, "note": null}, {"m": 9, "name": "مجدي حنا صليب", "amount": 750, "note": null}, {"m": 10, "name": "سهير حبيب شفيق", "amount": 750, "note": null}, {"m": 11, "name": "عايدة بطرس اخنوخ", "amount": 750, "note": null}, {"m": 12, "name": "امل معوض بولس", "amount": 2000, "note": null}, {"m": 13, "name": "كريمة فوزي شاكر", "amount": 750, "note": null}, {"m": 14, "name": "مارينا جميل", "amount": 750, "note": null}, {"m": 15, "name": "نبيلة فؤاد يوسف", "amount": 750, "note": null}, {"m": 16, "name": "مرفت سمير فهمي", "amount": 750, "note": null}, {"m": 17, "name": "سعد موسي", "amount": 750, "note": null}, {"m": 18, "name": "جملات حنا", "amount": 750, "note": null}, {"m": 19, "name": "اسحق فؤاد يوسف", "amount": 750, "note": null}, {"m": 20, "name": "رضا متي امين", "amount": 750, "note": null}, {"m": 21, "name": "فايزة توفيق", "amount": 750, "note": null}, {"m": 22, "name": "نادية كامل تادرس", "amount": 750, "note": null}, {"m": 23, "name": "متي بباوي ميخائيل", "amount": 750, "note": null}, {"m": 24, "name": "ملاك حنا صليب", "amount": 750, "note": null}, {"m": 25, "name": "مريم فرح حنا", "amount": 750, "note": null}, {"m": 26, "name": "نعناعة توفيق هارون", "amount": 750, "note": null}, {"m": 27, "name": "سنية عزيز", "amount": 750, "note": null}, {"m": 28, "name": "سامية جرجي", "amount": 750, "note": null}], "computedTotal": 25000, "computedCount": 28}, {"id": 17, "name": "كفر درويش", "officialCases": 10, "officialAmount": 60000, "committee": "عزمي اسحق", "people": [{"m": 1, "name": "حنان عبد المسيح حنا", "amount": 10000, "note": null}, {"m": 2, "name": "فايز حبيب ونيس", "amount": 6000, "note": null}, {"m": 3, "name": "عطية فايز حبيب", "amount": 7000, "note": null}, {"m": 4, "name": "حكيمة رزق الله جرجس", "amount": 6000, "note": null}, {"m": 5, "name": "فادية راغب عبد السيد", "amount": 6000, "note": null}, {"m": 6, "name": "نادية جمال عبد السيد", "amount": 6000, "note": null}, {"m": 7, "name": "عايدة فايز", "amount": 6000, "note": null}, {"m": 8, "name": "غالية عيد صادق", "amount": 7000, "note": null}, {"m": 9, "name": "مريم صليب", "amount": 3000, "note": null}, {"m": 10, "name": "هايدي ميلاد", "amount": 3000, "note": null}], "computedTotal": 60000, "computedCount": 10}]}}, "currentYear": "2026"}</script>
 <script>
 let DATA = JSON.parse(document.getElementById('app-data').textContent);
 const fmt = n => (n===null || n===undefined || n==='') ? '—' : Number(n).toLocaleString('ar-EG');
@@ -546,11 +585,36 @@ const escapeHtml = s => (s===null||s===undefined) ? '' : String(s).replace(/&/g,
 
 let currentMeetingId = null;
 let editMode = false;
+let homeEditMode = false;
 let dirty = false;
 let canEditPage = true;
 
-const STORAGE_KEY = 'saints-aid-2026-data';
+const STORAGE_KEY = 'saints-aid-multi-year-data';
 const DRIVE_URL_KEY = 'saints-aid-2026-drive-url';
+
+/* ---- migration: support old single-year files transparently ---- */
+function migrateIfNeeded(d){
+  if(d && d.years && d.currentYear) return d;
+  if(d && Array.isArray(d.meetings)){
+    const year = (d.grand && d.grand.year) ? String(d.grand.year) : '2026';
+    return {
+      years: {
+        [year]: {
+          label: 'عام ' + year,
+          individualAid: (d.grand && d.grand.individualAid) || 0,
+          meetings: d.meetings
+        }
+      },
+      currentYear: year
+    };
+  }
+  return { years: { '2026': { label: 'عام 2026', individualAid: 0, meetings: [] } }, currentYear: '2026' };
+}
+DATA = migrateIfNeeded(DATA);
+
+function curYear(){
+  return DATA.years[DATA.currentYear];
+}
 
 function loadLocalCache(){
   try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }
@@ -581,8 +645,10 @@ async function pullFromDrive(silent){
     const res = await fetch(url, { method: 'GET' });
     if(!res.ok) throw new Error('bad status');
     const json = await res.json();
-    if(json && json.meetings && json.grand){
-      DATA = json;
+    const migrated = migrateIfNeeded(json);
+    if(migrated && migrated.years){
+      DATA = migrated;
+      if(!DATA.years[DATA.currentYear]) DATA.currentYear = Object.keys(DATA.years)[0];
       saveLocalCache();
       document.getElementById('app-data').textContent = JSON.stringify(DATA);
       clearDirty();
@@ -661,39 +727,122 @@ function recalcMeeting(mt){
   mt.computedTotal = mt.people.reduce((s,p)=> s + (typeof p.amount === 'number' ? p.amount : 0), 0);
 }
 
-function recalcGrand(){
-  DATA.grand.totalMeetings = DATA.meetings.length;
-  DATA.grand.totalCasesOfficial = DATA.meetings.reduce((s,m)=> s + (Number(m.officialCases)||0), 0);
-  DATA.grand.totalAmountOfficial = DATA.meetings.reduce((s,m)=> s + (Number(m.officialAmount)||0), 0);
-  DATA.grand.grandTotal = DATA.grand.totalAmountOfficial + (Number(DATA.grand.individualAid)||0);
+function yearStats(y){
+  const meetings = y.meetings;
+  const totalMeetings = meetings.length;
+  const totalCasesOfficial = meetings.reduce((s,m)=> s + (Number(m.officialCases)||0), 0);
+  const totalAmountOfficial = meetings.reduce((s,m)=> s + (Number(m.officialAmount)||0), 0);
+  const individualAid = Number(y.individualAid)||0;
+  return { totalMeetings, totalCasesOfficial, totalAmountOfficial, individualAid, grandTotal: totalAmountOfficial + individualAid };
 }
 
 function editIndividualAid(){
-  const cur = DATA.grand.individualAid;
-  const val = prompt('قيمة المساعدات الفردية الجديدة (جنيه):', cur);
+  const y = curYear();
+  const cur = y.individualAid;
+  const val = prompt('قيمة المساعدات الفردية الجديدة لهذه السنة (جنيه):', cur);
   if(val === null) return;
   const num = Number(val);
   if(isNaN(num)){ showToast('قيمة غير صحيحة'); return; }
-  DATA.grand.individualAid = num;
-  recalcGrand();
+  y.individualAid = num;
   markDirty();
   renderHome();
 }
 
+function renderYearBar(){
+  const bar = document.getElementById('year-bar');
+  const years = Object.keys(DATA.years).sort();
+  bar.innerHTML = years.map(y => `
+    <button class="year-chip ${y === DATA.currentYear ? 'active' : ''}" onclick="switchYear('${y}')">${escapeHtml(DATA.years[y].label || y)}</button>
+  `).join('') + `<button class="year-chip add" onclick="addYear()">+ سنة جديدة</button>`;
+}
+
+function switchYear(y){
+  if(!DATA.years[y]) return;
+  DATA.currentYear = y;
+  homeEditMode = false;
+  renderHome();
+}
+
+function addYear(){
+  const input = prompt('اكتب السنة الجديدة (مثال: 2027):', '');
+  if(input === null) return;
+  const key = input.trim();
+  if(!key){ showToast('من فضلك اكتب رقم سنة صحيح'); return; }
+  if(DATA.years[key]){ DATA.currentYear = key; renderHome(); showToast('هذه السنة موجودة بالفعل، تم فتحها'); return; }
+  DATA.years[key] = { label: 'عام ' + key, individualAid: 0, meetings: [] };
+  DATA.currentYear = key;
+  markDirty();
+  renderHome();
+  showToast('تم إنشاء سنة جديدة: ' + key);
+}
+
+function deleteCurrentYear(){
+  const years = Object.keys(DATA.years);
+  if(years.length <= 1){ showToast('لا يمكن حذف آخر سنة متبقية في التطبيق'); return; }
+  const y = DATA.currentYear;
+  if(!confirm('هل أنت متأكد من حذف "' + (DATA.years[y].label || y) + '" نهائيًا؟ لا يمكن التراجع بعد الحفظ.')) return;
+  delete DATA.years[y];
+  DATA.currentYear = Object.keys(DATA.years).sort()[0];
+  markDirty();
+  renderHome();
+  switchTab('home');
+  showToast('تم حذف السنة');
+}
+
+function toggleHomeEdit(){
+  homeEditMode = !homeEditMode;
+  renderHome();
+}
+
+function addMeeting(){
+  const y = curYear();
+  const maxId = y.meetings.reduce((m,mt)=> Math.max(m, mt.id||0), 0);
+  const newMeeting = { id: maxId + 1, name: 'اجتماع جديد', officialCases: 0, officialAmount: 0, committee: '', people: [] };
+  y.meetings.push(newMeeting);
+  markDirty();
+  openDetail(newMeeting.id);
+  editMode = true;
+  renderDetail();
+}
+
+function deleteMeeting(id, evt){
+  if(evt) evt.stopPropagation();
+  const y = curYear();
+  const mt = y.meetings.find(m => m.id === id);
+  if(!mt) return;
+  if(!confirm('هل تريد حذف "' + mt.name + '" وكل أسمائه نهائيًا؟')) return;
+  y.meetings = y.meetings.filter(m => m.id !== id);
+  markDirty();
+  renderHome();
+  showToast('تم حذف الاجتماع');
+}
+
 function renderHome(){
-  document.getElementById('s-grand').textContent = fmt(DATA.grand.grandTotal);
-  document.getElementById('s-meetings').textContent = fmt(DATA.grand.totalMeetings);
-  document.getElementById('s-cases').textContent = fmt(DATA.grand.totalCasesOfficial);
-  document.getElementById('s-distributed').textContent = fmt(DATA.grand.totalAmountOfficial);
-  document.getElementById('s-individual').textContent = fmt(DATA.grand.individualAid);
-  document.getElementById('meet-count-lbl').textContent = `(${DATA.meetings.length})`;
+  const y = curYear();
+  const stats = yearStats(y);
+
+  document.getElementById('s-grand').textContent = fmt(stats.grandTotal);
+  document.getElementById('s-meetings').textContent = fmt(stats.totalMeetings);
+  document.getElementById('s-cases').textContent = fmt(stats.totalCasesOfficial);
+  document.getElementById('s-distributed').textContent = fmt(stats.totalAmountOfficial);
+  document.getElementById('s-individual').textContent = fmt(stats.individualAid);
+  document.getElementById('meet-count-lbl').textContent = `(${y.meetings.length})`;
+
+  const homeEditBtn = document.getElementById('home-edit-btn');
+  homeEditBtn.textContent = homeEditMode ? '✓ تم' : '✎ تعديل القائمة';
+  homeEditBtn.classList.toggle('on', homeEditMode);
+
+  const currentYearLabelSettings = document.getElementById('current-year-label-settings');
+  if(currentYearLabelSettings) currentYearLabelSettings.textContent = y.label || DATA.currentYear;
+
+  renderYearBar();
 
   const list = document.getElementById('meeting-list');
   list.innerHTML = '';
-  DATA.meetings.forEach(mt => {
+  y.meetings.forEach(mt => {
     const card = document.createElement('div');
-    card.className = 'meeting-card';
-    card.onclick = () => openDetail(mt.id);
+    card.className = 'meeting-card' + (homeEditMode ? ' home-edit' : '');
+    card.onclick = homeEditMode ? null : () => openDetail(mt.id);
     card.innerHTML = `
       <div class="meeting-badge">${mt.id}</div>
       <div class="meeting-info">
@@ -704,14 +853,29 @@ function renderHome(){
         <div class="amt">${fmt(mt.officialAmount)} ج</div>
         <div class="cases">${fmt(mt.officialCases)} حالة</div>
       </div>
-      <div class="chevron">‹</div>
+      ${homeEditMode
+        ? `<button class="mini-del" title="حذف">✕</button>`
+        : `<div class="chevron">‹</div>`}
     `;
+    if(homeEditMode){
+      card.querySelector('.mini-del').onclick = (e) => deleteMeeting(mt.id, e);
+      card.querySelector('.meeting-info').onclick = () => openDetail(mt.id);
+    }
     list.appendChild(card);
   });
+
+  if(homeEditMode){
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-meeting-btn';
+    addBtn.textContent = '+ إضافة كنيسة / اجتماع جديد';
+    addBtn.onclick = addMeeting;
+    list.appendChild(addBtn);
+  }
 }
 
 function renderDetail(){
-  const mt = DATA.meetings.find(m => m.id === currentMeetingId);
+  const y = curYear();
+  const mt = y.meetings.find(m => m.id === currentMeetingId);
   if(!mt) return;
   recalcMeeting(mt);
 
@@ -729,7 +893,7 @@ function renderDetail(){
     sum.classList.add('editing');
     sum.innerHTML = `
       <div class="mini">
-        <span class="field-label">اسم الاجتماع</span>
+        <span class="field-label">اسم الكنيسة / الاجتماع</span>
         <input type="text" id="f-name" value="${escapeHtml(mt.name)}">
       </div>
       <div class="mini">
@@ -745,6 +909,7 @@ function renderDetail(){
         <input type="number" id="f-cases" value="${mt.officialCases ?? ''}">
       </div>
       <div class="committee-line">إجمالي المبالغ بالأسماء حاليًا: <b>${fmt(mt.computedTotal)} ج</b> — عدد الأسماء: <b>${fmt(mt.people.length)}</b></div>
+      <button class="settings-btn-secondary" style="width:100%; margin-top:10px; color:#b43232; border-color:rgba(180,50,50,.35);" onclick="deleteMeetingFromDetail(${mt.id})">حذف هذا الاجتماع نهائيًا</button>
     `;
     sum.querySelector('#f-name').oninput = e => { mt.name = e.target.value; markDirty(); };
     sum.querySelector('#f-committee').oninput = e => { mt.committee = e.target.value; markDirty(); };
@@ -769,6 +934,14 @@ function renderDetail(){
   }
 
   renderPeople(mt);
+}
+
+function deleteMeetingFromDetail(id){
+  if(!confirm('هل تريد حذف هذا الاجتماع وكل أسمائه نهائيًا؟')) return;
+  const y = curYear();
+  y.meetings = y.meetings.filter(m => m.id !== id);
+  markDirty();
+  goHome();
 }
 
 function renderPeople(mt){
@@ -824,7 +997,8 @@ function renderPeople(mt){
 }
 
 function addPerson(){
-  const mt = DATA.meetings.find(m => m.id === currentMeetingId);
+  const y = curYear();
+  const mt = y.meetings.find(m => m.id === currentMeetingId);
   const lastM = mt.people.length ? mt.people[mt.people.length-1].m : 0;
   mt.people.push({ m: (typeof lastM === 'number' ? lastM + 1 : mt.people.length + 1), name: '', amount: null, note: null });
   markDirty();
@@ -847,7 +1021,6 @@ function openDetail(id){
 function goHome(){ switchTab('home'); }
 
 async function saveChanges(){
-  recalcGrand();
   saveLocalCache();
   document.getElementById('app-data').textContent = JSON.stringify(DATA);
   renderHome();
@@ -865,8 +1038,9 @@ async function saveChanges(){
 
 function discardChanges(){
   const cached = loadLocalCache();
-  if(cached){ DATA = cached; }
+  if(cached){ DATA = migrateIfNeeded(cached); }
   editMode = false;
+  homeEditMode = false;
   clearDirty();
   document.getElementById('app-data').textContent = JSON.stringify(DATA);
   renderHome();
@@ -877,44 +1051,51 @@ function discardChanges(){
 function doSearch(){
   const q = document.getElementById('search-input').value.trim();
   const results = document.getElementById('search-results');
+  const y = curYear();
   if(!q){
-    results.innerHTML = `<div class="empty-state"><div class="icon">⌕</div>اكتب اسمًا للبحث عنه في كل الاجتماعات</div>`;
+    results.innerHTML = `<div class="empty-state"><div class="icon">⌕</div>اكتب اسمًا للبحث عنه داخل اجتماعات سنة ${escapeHtml(y.label || DATA.currentYear)}</div>`;
     return;
   }
   let matches = [];
-  DATA.meetings.forEach(mt => {
+  y.meetings.forEach(mt => {
     mt.people.forEach(p => {
-      if(p.name.includes(q)){
+      if((p.name||'').includes(q)){
         matches.push({...p, meetingName: mt.name, meetingId: mt.id});
       }
     });
   });
   if(matches.length === 0){
-    results.innerHTML = `<div class="empty-state"><div class="icon">◎</div>لا توجد نتائج مطابقة لـ "${q}"</div>`;
+    results.innerHTML = `<div class="empty-state"><div class="icon">◎</div>لا توجد نتائج مطابقة لـ "${escapeHtml(q)}" في سنة ${escapeHtml(y.label || DATA.currentYear)}</div>`;
     return;
   }
   results.innerHTML = matches.map(p => `
     <div class="person-row" style="cursor:pointer" onclick="openDetail(${p.meetingId})">
       <div class="idx">${p.m !== null && p.m !== undefined ? p.m : ''}</div>
-      <div class="pname">${p.name}<span class="result-meeting-tag">${p.meetingName}</span></div>
+      <div class="pname">${escapeHtml(p.name)}<span class="result-meeting-tag">${escapeHtml(p.meetingName)}</span></div>
       <div class="pamt">${fmt(p.amount)} ج</div>
     </div>
   `).join('');
 }
 
 function renderStats(){
-  const maxAmt = Math.max(...DATA.meetings.map(m => m.officialAmount));
-  const maxCases = Math.max(...DATA.meetings.map(m => m.officialCases));
-  document.getElementById('stats-bars').innerHTML = DATA.meetings.map(m => `
+  const y = curYear();
+  if(y.meetings.length === 0){
+    document.getElementById('stats-bars').innerHTML = `<div class="empty-state"><div class="icon">▤</div>لا توجد اجتماعات مسجلة في هذه السنة بعد</div>`;
+    document.getElementById('stats-bars-cases').innerHTML = '';
+    return;
+  }
+  const maxAmt = Math.max(...y.meetings.map(m => Number(m.officialAmount)||0), 1);
+  const maxCases = Math.max(...y.meetings.map(m => Number(m.officialCases)||0), 1);
+  document.getElementById('stats-bars').innerHTML = y.meetings.map(m => `
     <div class="bar-row">
-      <div class="bar-label"><span class="nm">${m.name}</span><span class="vl">${fmt(m.officialAmount)} ج</span></div>
-      <div class="bar-track"><div class="bar-fill" style="width:${(m.officialAmount/maxAmt*100).toFixed(1)}%"></div></div>
+      <div class="bar-label"><span class="nm">${escapeHtml(m.name)}</span><span class="vl">${fmt(m.officialAmount)} ج</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${((Number(m.officialAmount)||0)/maxAmt*100).toFixed(1)}%"></div></div>
     </div>
   `).join('');
-  document.getElementById('stats-bars-cases').innerHTML = DATA.meetings.map(m => `
+  document.getElementById('stats-bars-cases').innerHTML = y.meetings.map(m => `
     <div class="bar-row">
-      <div class="bar-label"><span class="nm">${m.name}</span><span class="vl">${fmt(m.officialCases)} حالة</span></div>
-      <div class="bar-track"><div class="bar-fill" style="width:${(m.officialCases/maxCases*100).toFixed(1)}%"></div></div>
+      <div class="bar-label"><span class="nm">${escapeHtml(m.name)}</span><span class="vl">${fmt(m.officialCases)} حالة</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${((Number(m.officialCases)||0)/maxCases*100).toFixed(1)}%"></div></div>
     </div>
   `).join('');
 }
@@ -933,12 +1114,15 @@ function switchTab(name){
   if(name === 'settings'){
     document.getElementById('drive-url-input').value = getDriveUrl();
     document.getElementById('drive-test-result').textContent = '';
+    const y = curYear();
+    const lbl = document.getElementById('current-year-label-settings');
+    if(lbl) lbl.textContent = y.label || DATA.currentYear;
   }
 }
 
 async function init(){
   const cached = loadLocalCache();
-  if(cached){ DATA = cached; }
+  if(cached){ DATA = migrateIfNeeded(cached); }
   renderHome();
 
   const url = getDriveUrl();
