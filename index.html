@@ -591,6 +591,7 @@ let canEditPage = true;
 
 const STORAGE_KEY = 'saints-aid-multi-year-data';
 const DRIVE_URL_KEY = 'saints-aid-2026-drive-url';
+const DEFAULT_DRIVE_URL = 'https://script.google.com/macros/s/AKfycbxy3DzWN6s_hyuMUEMjIbKI2Utv_EzWwsDU_PoM15cbEQ71xeyQLZ2iMrYylzBejc-Qng/exec';
 
 /* ---- migration: support old single-year files transparently ---- */
 function migrateIfNeeded(d){
@@ -624,7 +625,7 @@ function saveLocalCache(){
   try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA)); }catch(e){ /* storage unavailable */ }
 }
 function getDriveUrl(){
-  try{ return localStorage.getItem(DRIVE_URL_KEY) || ''; }catch(e){ return ''; }
+  try{ return localStorage.getItem(DRIVE_URL_KEY) || DEFAULT_DRIVE_URL; }catch(e){ return ''; }
 }
 function setDriveUrl(url){
   try{ localStorage.setItem(DRIVE_URL_KEY, url); }catch(e){ /* storage unavailable */ }
